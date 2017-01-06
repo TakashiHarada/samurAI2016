@@ -8,7 +8,7 @@ TOOACTIVEOBJECTS= ${COMMONOBJECTS} tooActivePlayer.o
 NONCHECKINGOBJECTS= ${COMMONOBJECTS} nonCheckingPlayer.o
 PLANNINGOBJECTS= planning.o
 GREEDYOBJECTS= ${COMMONOBJECTS} ${PLANNINGOBJECTS} greedyPlayer.o
-TARGET= randomPlayer greedyPlayer timeoutPlayer tooActivePlayer nonCheckingPlayer
+TARGET= randomPlayer greedyPlayer timeoutPlayer tooActivePlayer nonCheckingPlayer customPlayers
 OBJECTS= ${RANDOMOBJECTS} ${TIMEOUTOBJECTS} ${TOOACTIVEOBJECTS} ${NONCHECKINGOBJECTS} ${PLANNINGOBJECTS} ${GREEDYOBJECTS}
 
 all: ${TARGET}
@@ -27,6 +27,9 @@ nonCheckingPlayer: ${NONCHECKINGOBJECTS}
 
 greedyPlayer: ${GREEDYOBJECTS}
 	${CPP} ${CPPFLAGS} -o $@ $^
+
+customPlayers: 
+	cd haskell; make
 
 -include ${OBJECTS:.o=.d}
 
