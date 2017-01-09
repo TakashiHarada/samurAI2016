@@ -1,3 +1,5 @@
+-- $ hlint TurnInformation.hs
+
 module TurnInformation where
 
 import qualified Data.Map as M
@@ -32,8 +34,6 @@ data BattlefieldSection =
            
 -- Battlefield State
 type BattlefieldState = M.Map CurrentPosition BattlefieldSection
-
-
 
 -------- Initial State
 ---- Turn Number
@@ -70,6 +70,6 @@ samuraiStates = M.fromList [(Fspear,fSpear),(Fswords,fSwords),(Faxe,fAxe),(Espea
 -- Battlefield State
 battleFieldState :: BattlefieldState
 battleFieldState = foldl
-  (\list (piece,point) -> (M.update (\_ -> Just piece) point) list)
+  (\list (piece,point) -> M.update (\_ -> Just piece) point list)
   (M.fromList [((x,y), NotOccupied) | x <- [1..15], y <- [1..15]])
   [(FriendSpear, (0,0)), (FriendSwords, (0,7)), (FriendBattleaxe, (7,0)), (EnemySpear, (14,14)), (EnemySwords, (14,7)), (EnemyBattleaxe,(7,14))]

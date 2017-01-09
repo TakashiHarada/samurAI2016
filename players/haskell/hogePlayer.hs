@@ -1,3 +1,5 @@
+-- $ hlint hogePlayer.hs
+
 import Control.Monad
 import System.IO
 
