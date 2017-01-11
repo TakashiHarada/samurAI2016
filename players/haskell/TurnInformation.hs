@@ -9,12 +9,12 @@ type TurnNumber = Int
 type CurrentPosition = (Int,Int)
 data OrderStatus = Already | Yet
 data ShowingStatus = Show | Hide
-type TreatmentTurn = Int
+type TreatmentTurns = Int
 
 data SamuraiState = SS { cp :: CurrentPosition,
                          os :: OrderStatus,
                          ss :: ShowingStatus,
-                         tt :: TreatmentTurn }
+                         tt :: TreatmentTurns }
 
 ---------- 3. Battlefield State
 
@@ -27,7 +27,7 @@ data BattlefieldSection =
   | EnemySwords      -- 4
   | EnemyBattleaxe   -- 5
   | NotOccupied      -- 8
-  | NoInromation     -- 9
+  | NoInformation     -- 9
 
 -- Battlefield State
 type BattlefieldState = M.Map CurrentPosition BattlefieldSection

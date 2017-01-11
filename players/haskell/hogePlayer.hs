@@ -1,6 +1,7 @@
 import Control.Monad
 import System.IO
-
+import TurnInformation
+  
 main :: IO ()
 main = do
   -- get a Game Information and response 0
