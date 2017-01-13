@@ -3,7 +3,8 @@
 import Control.Monad
 import System.IO
 import qualified TurnInformation as T
-  
+import qualified Ordering as O
+       
 main :: IO ()
 main = do
   -- get a Game Information and response 0
@@ -36,10 +37,10 @@ getTurnNumber :: String -> T.TurnNumber
 getTurnNumber s = read s
 
 -- TODO:: Implement!
-detNextOrder :: [T.GameData] -> [T.Order]
+detNextOrder :: [T.GameData] -> [O.Order]
 detNextOrder gds = undefined
 
-sendOrderStr :: [T.Order] -> IO()
+sendOrderStr :: [O.Order] -> IO()
 sendOrderStr orders = putStrLn "1 1 6 9 0" --FIXME
 
 

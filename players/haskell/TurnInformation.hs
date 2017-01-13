@@ -43,10 +43,7 @@ type BattlefieldState = M.Map CurrentPosition BattlefieldSection
 
 data GameData = GD {tnum :: TurnNumber,
                     sams :: SamuraiStates,
-                    bfs  :: BattlefieldState } deriving (Show,Eq,Ord)
-
----------- 6. Ordering
-type Order = Int
+                    bfs  :: BattlefieldState} deriving (Show,Eq,Ord)
 
 -------- Initial State
 ---- Turn Number
