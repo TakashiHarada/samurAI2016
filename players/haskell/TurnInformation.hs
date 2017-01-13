@@ -7,26 +7,22 @@ import qualified Data.Map as M
 ---------- 1. Turn Number
 type TurnNumber = Int
 
+--Final :: TurnNumber
+final = 96
+
+isFinalTurn :: TurnNumber -> Bool
+isFinalTurn x = x == final 
+
 ---------- 2. Samurai states
 type CurrentPosition = (Int,Int)
-<<<<<<< HEAD
-data OrderStatus = Already | Yet
-data ShowingStatus = Show | Hide
-type TreatmentTurns = Int
-=======
 data OrderStatus = Already | Yet deriving (Show,Eq,Ord)
 data ShowingStatus = Show | Hide deriving (Show,Eq,Ord)
-type TreatmentTurn = Int
->>>>>>> c51b8810d6361547d3c788c1f32cadf62f3053dc
+type TreatmentTurns = Int
 
 data SamuraiState = SS { cp :: CurrentPosition,
                          os :: OrderStatus,
                          ss :: ShowingStatus,
-<<<<<<< HEAD
-                         tt :: TreatmentTurns }
-=======
-                         tt :: TreatmentTurn } deriving (Show,Eq,Ord)
->>>>>>> c51b8810d6361547d3c788c1f32cadf62f3053dc
+                         tt :: TreatmentTurns } deriving (Show,Eq,Ord)
 
 ---------- 3. Battlefield State
 
@@ -39,21 +35,23 @@ data BattlefieldSection =
   | EnemySwords      -- 4
   | EnemyBattleaxe   -- 5
   | NotOccupied      -- 8
-<<<<<<< HEAD
   | NoInformation     -- 9
-
-=======
-  | NoInromation     -- 9
   deriving (Show,Eq,Ord)
            
->>>>>>> c51b8810d6361547d3c788c1f32cadf62f3053dc
 -- Battlefield State
 type BattlefieldState = M.Map CurrentPosition BattlefieldSection
 
+data GameData = GD {tnum :: TurnNumber,
+                    sams :: SamuraiStates,
+                    bfs  :: BattlefieldState } deriving (Show,Eq,Ord)
+
+---------- 6. Ordering
+type Order = Int
+
 -------- Initial State
 ---- Turn Number
-turnNumber :: TurnNumber
-turnNumber = 0
+iniTurnNumber :: TurnNumber
+iniTurnNumber = 0
 
 ---- Samurai States
 fSpear :: SamuraiState
@@ -79,12 +77,15 @@ data Samurai = Fspear | Fswords | Faxe | Espear | Eswords | Eaxe
 
 type SamuraiStates = M.Map Samurai SamuraiState
 
-samuraiStates :: SamuraiStates
-samuraiStates = M.fromList [(Fspear,fSpear),(Fswords,fSwords),(Faxe,fAxe),(Espear,eSpear),(Eswords,eSwords),(Eaxe,eAxe)]
+iniSamuraiStates :: SamuraiStates
+iniSamuraiStates = M.fromList [(Fspear,fSpear),(Fswords,fSwords),(Faxe,fAxe),(Espear,eSpear),(Eswords,eSwords),(Eaxe,eAxe)]
 
 -- Battlefield State
-battleFieldState :: BattlefieldState
-battleFieldState = foldl
+iniBattleFieldState :: BattlefieldState
+iniBattleFieldState = foldl
   (\list (piece,point) -> M.update (\_ -> Just piece) point list)
   (M.fromList [((x,y), NotOccupied) | x <- [1..15], y <- [1..15]])
   [(FriendSpear, (0,0)), (FriendSwords, (0,7)), (FriendBattleaxe, (7,0)), (EnemySpear, (14,14)), (EnemySwords, (14,7)), (EnemyBattleaxe,(7,14))]
+
+iniData :: GameData
+iniData = GD iniTurnNumber iniSamuraiStates iniBattleFieldState
