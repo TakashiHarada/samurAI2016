@@ -21,7 +21,7 @@ mainLoop gds = do
   let ls = lines s
       gd = getGameData ls
       gameRecords = gd : gds
-  sendOrderStr $ detNextOrder gameRecords
+  O.sendOrderString $ detNextOrder gameRecords
   if (T.isFinalTurn $ T.tnum gd)
     then
       return ()
@@ -40,8 +40,6 @@ getTurnNumber s = read s
 detNextOrder :: [T.GameData] -> [O.Order]
 detNextOrder gds = undefined
 
-sendOrderStr :: [O.Order] -> IO()
-sendOrderStr orders = putStrLn "1 1 6 9 0" --FIXME
 
 
 {-
