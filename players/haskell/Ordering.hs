@@ -5,7 +5,7 @@ import qualified Weapon as W
 import qualified Direction as D
 import System.IO
 
-data Order = Order { weapon :: W.Weapon, actions :: [A.Action] }
+data Order = Order { getWeapon :: W.Weapon, getActions :: [A.Action] } deriving (Show,Eq,Ord)
 
 -- e.g. : Order W.Spear [A.Occupy D.South]
 --        Order W.Spear [A.Occupy D.South, A.Move D.North, A.Hide]
@@ -16,4 +16,4 @@ sendOrderString :: [Order] -> IO()
 sendOrderString orders = putStrLn "1 1 6 9 0" >>= \_ -> hFlush stdout --FIXME
 
 orderCost :: Order -> Int
-orderCost order = sum $ map A.actionCost (actions order)
+orderCost order = sum $ map A.actionCost (getActions order)
