@@ -9,11 +9,8 @@ import qualified GameData as G
        
 main :: IO ()
 main = do
-  -- get a Game Information and response 0
-  gameInfo <- getLine
-  putStrLn "0"
-  hFlush stdout
-  -- get a Turn Information and response
+  gameInfo <- G.readGameInfo
+  G.acknowledgementResponseToTheGameInformation 
   mainLoop []
   return ()
 
