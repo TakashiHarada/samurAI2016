@@ -4,6 +4,7 @@ import System.IO
 import qualified TurnNumber as T
 import qualified SamuraiStates as S
 import qualified BattlefieldState as B
+import qualified OrderStatus as O
 import qualified Weapon as W
 import qualified Army as A
 import qualified Data.Map as M
@@ -38,7 +39,7 @@ getSS str =  zip
              [ (x,y) | x <- [A.Friend,A.Enemy], y <- [W.Spear,W.Swords,W.Axe]]
              [ S.SamuraiState
                (list2pair $ map read $ take 2 $ words $ str !! pos)
-               undefined
+               (O.intToOrderStatus $ read $ (words $ str !! pos) !! 2)
                undefined
                undefined | pos <- [0..5]]
 --       (flip (!!) 2 $ func pos str)
