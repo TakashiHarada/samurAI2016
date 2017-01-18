@@ -33,12 +33,20 @@ getTN str =  digitToInt $ read str :: Int
 
 
 getSS :: [String] -> [((A.Army,W.Weapon),S.SamuraiState)]
---getSS = undefined
-getSS str =  zip 
-       [ (x,y) | x <- [A.Friend,A.Enemy], y <- [W.Spear,W.Swords,W.Axe]] 
-       [ S.SamuraiState ( (\[x,y] -> (x,y)).take 2.func pos str) (flip (!!) 2.func pos str) (flip (!!) 3.func pos str) (flip (!!) 4.func pos str)  | pos <- [0..5] ]
-       where
-          func = words $ flip (!!)
+-- getSS = undefined
+getSS str =  zip
+             [ (x,y) | x <- [A.Friend,A.Enemy], y <- [W.Spear,W.Swords,W.Axe]]
+             [ S.SamuraiState
+               (list2pair $ map read $ take 2 $ words $ str !! pos)
+               undefined
+               undefined
+               undefined | pos <- [0..5]]
+--       (flip (!!) 2 $ func pos str)
+--       (flip (!!) 3 $ func pos str)
+--       (flip (!!) 4 $ func pos str)  | pos <- [0..5]]
+    where
+--       func = words $ flip (!!)
+       list2pair = \[x,y] -> (x,y)
 
 getBS :: [String] -> B.BattlefieldState
 getBS = undefined
