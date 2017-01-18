@@ -12,24 +12,13 @@ import qualified ShowingStatus as ShS
 import qualified TreatmentTurns as TT
 import qualified BattlefieldState as BState
 import qualified BattlefieldSection as BSection
-
----------- 1. Turn Number
-type TurnNumber = Int
-
---Final :: TurnNumber
-final = 96
-
-isFinalTurn :: TurnNumber -> Bool
-isFinalTurn x = x == final 
-
-data GameData = GD {tnum :: TurnNumber,
-                    sams :: SamuraiS.SamuraiStates,
-                    bfs  :: BState.BattlefieldState} deriving (Show,Eq,Ord)
+import qualified TurnNumber as TN
+import qualified GameData as G
 
 -------- Initial State
 
 ---- Turn Number
-iniTurnNumber :: TurnNumber
+iniTurnNumber :: TN.TurnNumber
 iniTurnNumber = 0
 
 -- BattlefieldState = M.Map CP.CurrentPosition BS.BattlefieldSection
@@ -45,8 +34,8 @@ iniBattleFieldState = foldl
    ((BSection.Occupied A.Enemy W.Axe), (7,14))
    ]
 
-iniData :: GameData
-iniData = GD iniTurnNumber iniSamuraiStates iniBattleFieldState
+iniData :: G.GameData
+iniData = G.GameData iniTurnNumber iniSamuraiStates iniBattleFieldState
 
 iniSamuraiStates :: SamuraiS.SamuraiStates
 iniSamuraiStates =

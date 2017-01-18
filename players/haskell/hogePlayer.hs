@@ -3,7 +3,9 @@
 import Control.Monad
 import System.IO
 import qualified TurnInformation as T
+import qualified TurnNumber as TN
 import qualified Ordering as O
+import qualified GameData as G
        
 main :: IO ()
 main = do
@@ -15,34 +17,28 @@ main = do
   mainLoop []
   return ()
 
-mainLoop :: [T.GameData] -> IO()
+mainLoop :: [G.GameData] -> IO()
 mainLoop gds = do
+  tnum <- getLine
   s <- getContents
   let ls = lines s
-      gd = getGameData ls
+      gd = G.getGameData ls
       gameRecords = gd : gds
   O.sendOrderString $ detNextOrder gameRecords
-  if (T.isFinalTurn $ T.tnum gd)
+--  if (TN.isFinalTurn $ TN.tn gd)
+  if (TN.isFinalTurn $ TN.getTurnNumber tnum)
     then
       return ()
     else do
       hFlush stdout
       mainLoop (gameRecords)
 
-getGameData :: [String] -> T.GameData
-getGameData ls = T.iniData --FIXME
--- tn = getTurnNumber (head ls)
-
-getTurnNumber :: String -> T.TurnNumber
-getTurnNumber s = read s
-
 -- TODO:: Implement!
-detNextOrder :: [T.GameData] -> [O.Order]
+detNextOrder :: [G.GameData] -> [O.Order]
 detNextOrder gds = undefined
 
-
-
 {-
+
 getTurnInfo :: String -> IO()
 getTurnInfo x = do
   turnNumber <- getLine
