@@ -3,6 +3,7 @@ module GameData where
 import System.IO
 import qualified TurnNumber as T
 import qualified SamuraiStates as S
+import qualified ShowingStatus as SS
 import qualified BattlefieldState as B
 import qualified OrderStatus as O
 import qualified Weapon as W
@@ -40,8 +41,9 @@ getSS str =  zip
              [ S.SamuraiState
                (list2pair $ map read $ take 2 $ words $ str !! pos)
                (O.intToOrderStatus $ read $ (words $ str !! pos) !! 2)
-               undefined
-               undefined | pos <- [0..5]]
+               (SS.intToShowingStatus $ read $ (words $ str !! pos) !! 3)
+               (read $ (words $ str !! pos) !! 4)
+             | pos <- [0..5]]
 --       (flip (!!) 2 $ func pos str)
 --       (flip (!!) 3 $ func pos str)
 --       (flip (!!) 4 $ func pos str)  | pos <- [0..5]]
