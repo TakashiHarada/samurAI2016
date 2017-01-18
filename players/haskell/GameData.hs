@@ -7,7 +7,7 @@ import qualified BattlefieldState as B
 import qualified Weapon as W
 import qualified Army as A
 import qualified Data.Map as M
-
+import Data.Char
 
 data GameData = GameData { getTurnNumber :: T.TurnNumber,
                            getSamuraiStates :: S.SamuraiStates,
@@ -19,26 +19,28 @@ acknowledgementResponseToTheGameInformation = putStrLn "0" >>= \_ -> hFlush stdo
 
 divideComponent :: String -> GameData
 --divideComponent = undefined
-divideComponent s = GameData (getTN s) (M.fromList (getSS s)) (M.fromList [getBS s])
+--divideComponent s = GameData (getTN turnNumberString) (M.fromList (getSS samuraiStateString)) (M.fromList [getBS battlefieldString])
+divideComponent s = GameData (getTN turnNumberString) (M.fromList (getSS undefined)) (getBS undefined)
+      where
+       ls = lines s
+       turnNumberString = head ls
+       samuraiStateString = (take 6 . tail) ls
+       battlefieldString = drop 7 ls                
+
 
 getTN :: String -> T.TurnNumber
-getTN s = (read.head.lines) s
+getTN str =  digitToInt $ read str :: Int 
 
-getSS :: String -> [((A.Army,W.Weapon),S.SamuraiState)]
+
+getSS :: [String] -> [((A.Army,W.Weapon),S.SamuraiState)]
 --getSS = undefined
-getSS s = zip 
-      [ (x,y) | x <- [A.Friend,A.Enemy], y <- [W.Spear,W.Swords,W.Axe]] 
-      [ S.SamuraiState ((map \[x,y] -> (x,y) . (map read) .  take 2 .  words . lines s !! 0),(map \[x,y] -> (x,y) .map read .  take 2 .  words . lines s !! 1))  ((searchPosition pos) !! 2 ) ((searchPosition pos) !! 3) ((searchPosition pos) !! 4)  | pos <- [0..5] ]
-      where
-      searchPosition n = map (take 2 . words . tail . take 7 . lines) s
+getSS str =  zip 
+       [ (x,y) | x <- [A.Friend,A.Enemy], y <- [W.Spear,W.Swords,W.Axe]] 
+       [ S.SamuraiState ( (\[x,y] -> (x,y)).take 2.func pos str) (flip (!!) 2.func pos str) (flip (!!) 3.func pos str) (flip (!!) 4.func pos str)  | pos <- [0..5] ]
+       where
+          func = words $ flip (!!)
 
--- getSS s = zip 
---       [ (x,y) | x <- [A.Friend,A.Enemy], y <- [W.Spear,W.Swords,W.Axe]] 
---       [ z | z <- [ zz | zz <- S.SamuraiState (( (searchPosition pos) !! 0),((searchPosition pos) !! 1) ) ((searchPosition pos) !! 2 ) ((searchPosition pos) !! 3) ((searchPosition pos) !! 4) ,pos <- [0..5] ] ]
---       where
---       searchPosition n = map (take 2 . words . tail . take 7 . lines) s
-
-getBS :: String -> B.BattlefieldState
---getBS = undefined
-getBS s  = map (\[x,y] -> (x,y).(map read) .  take 2 .  words . lines) s
+getBS :: [String] -> B.BattlefieldState
+getBS = undefined
+--getBS s  = map (\[x,y] -> (x,y).(map read) .  take 2 .  words . lines) s
 
