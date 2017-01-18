@@ -19,20 +19,15 @@ main = do
 
 mainLoop :: [G.GameData] -> IO()
 mainLoop gds = do
-  tnum <- getLine
-  s <- getContents
-  let ls = lines s
-      gd = G.getGameData ls
-      gameRecords = gd : gds
-  O.sendOrderString $ detNextOrder gameRecords
---  if (TN.isFinalTurn $ TN.tn gd)
-  if (TN.isFinalTurn $ TN.getTurnNumber tnum)
+  gd <- fmap G.divideComponent getContents
+  O.sendOrderString $ detNextOrder (gd:gds)
+  if (TN.isFinalTurn $ G.getTurnNumber gd)
     then do
       hFlush stdout
       return ()
     else do
       hFlush stdout
-      mainLoop (gameRecords)
+      mainLoop (gd:gds)
 
 -- TODO:: Implement!
 detNextOrder :: [G.GameData] -> O.Order
