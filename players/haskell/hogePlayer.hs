@@ -6,6 +6,9 @@ import qualified TurnInformation as T
 import qualified TurnNumber as TN
 import qualified Ordering as O
 import qualified GameData as G
+import qualified Weapon as W
+import qualified Action as A
+import qualified Direction as D
        
 main :: IO ()
 main = do
@@ -28,7 +31,7 @@ mainLoop gds = do
 
 -- TODO:: Implement!
 detNextOrder :: [G.GameData] -> O.Order
-detNextOrder gds = undefined
+detNextOrder gds = O.Order W.Spear [A.Occupy D.South, A.Move D.North]
 
 {-
 
