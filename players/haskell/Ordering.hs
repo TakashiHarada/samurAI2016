@@ -10,12 +10,13 @@ data Order = Order { getWeapon :: W.Weapon, getActions :: [A.Action] } deriving 
 
 -- e.g. : Order W.Spear [A.Occupy D.South]
 --        Order W.Spear [A.Occupy D.South, A.Move D.North, A.Hide]
+--        Order W.Spear [A.Occupy D.South, A.Move D.North, A.Show]
 
 orderCostLimit = 7
 
 sendOrderString :: Order -> IO()
 sendOrderString (Order w as) = do
-  putStrLn $ (intToDigit $ W.weaponID w) : map (intToDigit . A.actionID) as
+  putStrLn $ foldr (\x y -> x : ' ' : y) ['0'] $ (intToDigit $ W.weaponID w) : map (intToDigit . A.actionID) as
   hFlush stdout
 
 orderCost :: Order -> Int
