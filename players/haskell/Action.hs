@@ -10,3 +10,8 @@ actionCost (Occupy _) = 4
 actionCost (Move _) = 2
 actionCost Show = 1
 actionCost Hide = 1
+
+actionID :: Action -> Int
+actionID (Occupy d) = D.directionID d
+actionID (Move d) = 4 + D.directionID d
+actionID _ = 9

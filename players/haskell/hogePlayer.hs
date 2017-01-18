@@ -27,14 +27,15 @@ mainLoop gds = do
   O.sendOrderString $ detNextOrder gameRecords
 --  if (TN.isFinalTurn $ TN.tn gd)
   if (TN.isFinalTurn $ TN.getTurnNumber tnum)
-    then
+    then do
+      hFlush stdout
       return ()
     else do
       hFlush stdout
       mainLoop (gameRecords)
 
 -- TODO:: Implement!
-detNextOrder :: [G.GameData] -> [O.Order]
+detNextOrder :: [G.GameData] -> O.Order
 detNextOrder gds = undefined
 
 {-

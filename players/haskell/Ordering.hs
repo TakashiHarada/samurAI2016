@@ -3,6 +3,7 @@ module Ordering where
 import qualified Action as A
 import qualified Weapon as W
 import qualified Direction as D
+import Data.Char
 import System.IO
 
 data Order = Order { getWeapon :: W.Weapon, getActions :: [A.Action] } deriving (Show,Eq,Ord)
@@ -12,8 +13,10 @@ data Order = Order { getWeapon :: W.Weapon, getActions :: [A.Action] } deriving 
 
 orderCostLimit = 7
 
-sendOrderString :: [Order] -> IO()
-sendOrderString orders = putStrLn "1 1 6 9 0" >>= \_ -> hFlush stdout --FIXME
+sendOrderString :: Order -> IO()
+sendOrderString (Order w as) = do
+  putStrLn $ (intToDigit $ W.weaponID w) : map (intToDigit . A.actionID) as
+  hFlush stdout
 
 orderCost :: Order -> Int
 orderCost order = sum $ map A.actionCost (getActions order)
