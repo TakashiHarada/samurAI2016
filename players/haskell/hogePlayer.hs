@@ -27,7 +27,6 @@ mainLoop gds = do
       return ()
     else do
       hFlush stdout
-      mainLoop (gd:gds)
 
 -- TODO:: Implement!
 detNextOrder :: [G.GameData] -> O.Order

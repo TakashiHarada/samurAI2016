@@ -8,3 +8,7 @@ showingStatusToInt :: ShowingStatus -> Int
 showingStatusToInt Show   = 1  -- friendly samurai hiding
 showingStatusToInt Hide   = 0  -- friendly samurai showing
 showingStatusToInt Unkown = 1  -- for enemy samurai
+
+intToShowingStatus :: Int -> ShowingStatus
+intToShowingStatus 0 = Show
+intToShowingStatus 1 = Unkown
