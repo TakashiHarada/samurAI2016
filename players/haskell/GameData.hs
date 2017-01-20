@@ -31,10 +31,10 @@ divideComponent s = GameData
     samuraiStateStrings = (take 6 . tail) ls
     battlefieldString = (words . unlines . drop 7) ls                
 
-hh = "-1 -1 1 0 0\n-1 -1 0 0 0\n-1 -1 1 0 0\n0 0 0 0\n1 1 1 1\n2 2 2 2"
-
 stringToTurnNumber :: String -> T.TurnNumber
-stringToTurnNumber str =  digitToInt $ read str :: Int 
+stringToTurnNumber = read
+
+example = "14\n0 6 1 0 0\n1 14 0 0 0\n9 12 0 0 0\n-1 -1 1 0 0\n-1 -1 0 0 0\n-1 -1 1 0 0\n"
 
 stringsToSamuraiStates :: [String] -> [((A.Army,W.Weapon),S.SamuraiState)]
 stringsToSamuraiStates str =  zip
