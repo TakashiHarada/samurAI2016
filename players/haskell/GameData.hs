@@ -20,7 +20,7 @@ readGameInfo = getLine
 acknowledgementResponseToTheGameInformation :: IO ()
 acknowledgementResponseToTheGameInformation = putStrLn "0" >>= \_ -> hFlush stdout
 
-divideComponent :: String -> GameData
+divideComponent :: IO GameData
 divideComponent s = GameData
                     (stringToTurnNumber turnNumberString)
                     (M.fromList (stringsToSamuraiStates samuraiStateStrings))

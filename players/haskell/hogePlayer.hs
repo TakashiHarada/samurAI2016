@@ -19,7 +19,8 @@ main = do
 
 mainLoop :: [G.GameData] -> IO()
 mainLoop gds = do
-  gd <- fmap G.divideComponent getContents
+--  gd <- fmap G.divideComponent getContents
+    gd <- G.divideComponent
   O.sendOrderString $ detNextOrder (gd:gds)
   if (TN.isFinalTurn $ G.getTurnNumber gd)
     then do
