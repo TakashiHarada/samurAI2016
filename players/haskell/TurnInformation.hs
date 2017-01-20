@@ -25,7 +25,7 @@ iniTurnNumber = 0
 iniBattleFieldState :: BState.BattlefieldState
 iniBattleFieldState = foldl
   (\list (piece,point) -> M.update (\_ -> Just piece) point list)
-  (M.fromList [((x,y), BSection.NotOccupied) | x <- [1..15], y <- [1..15]])
+  (M.fromList [((x,y), BSection.NotOccupied) | x <- [0..14], y <- [0..14]])
   [((BSection.Occupied A.Friend W.Spear), (0,0)),
    ((BSection.Occupied A.Friend W.Swords), (0,7)),
    ((BSection.Occupied A.Friend W.Axe), (7,0)),
