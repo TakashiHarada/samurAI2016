@@ -20,16 +20,16 @@ readGameInfo = getLine
 acknowledgementResponseToTheGameInformation :: IO ()
 acknowledgementResponseToTheGameInformation = putStrLn "0" >>= \_ -> hFlush stdout
 
-divideComponent :: IO GameData
+divideComponent :: [String] -> GameData
 divideComponent s = GameData
                     (stringToTurnNumber turnNumberString)
                     (M.fromList (stringsToSamuraiStates samuraiStateStrings))
                     (stringsToBattlefieldState battlefieldString)
   where
-    ls = lines s
-    turnNumberString = head ls
-    samuraiStateStrings = (take 6 . tail) ls
-    battlefieldString = (words . unlines . drop 7) ls                
+--    ls = lines s
+    turnNumberString = head s
+    samuraiStateStrings = (take 6 . tail) s
+    battlefieldString = (words . unlines . drop 7) s
 
 stringToTurnNumber :: String -> T.TurnNumber
 stringToTurnNumber = read
