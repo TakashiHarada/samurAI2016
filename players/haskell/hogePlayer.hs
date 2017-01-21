@@ -31,7 +31,8 @@ mainLoop gds = do
 
 -- TODO:: Implement!
 detNextOrder :: [G.GameData] -> O.Order
-detNextOrder gds = O.Order W.Spear [A.Occupy D.South, A.Move D.North]
+detNextOrder gds = O.Order W.Spear [A.Occupy D.South]
+--detNextOrder gds = O.Order W.Spear [A.Occupy D.South, A.Move D.North]
 
 {-
 
