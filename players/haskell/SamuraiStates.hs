@@ -16,3 +16,7 @@ data SamuraiState
                    getShowingStatus :: SS.ShowingStatus,
                    getTreatmentTurns :: TT.TreatmentTurns }
   deriving (Show,Eq,Ord)
+
+getSamuraiPosition :: (A.Army,W.Weapon) -> SamuraiStates -> CP.CurrentPosition
+getSamuraiPosition s map = getCurrentPosition ss
+  where ss = (\(Just x) -> x) (M.lookup s map)
