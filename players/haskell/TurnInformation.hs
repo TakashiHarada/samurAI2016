@@ -6,7 +6,7 @@ import qualified SamuraiStates as SamuraiS
 import qualified Data.Map as M
 import qualified Army as A
 import qualified Weapon as W
-import qualified CurrentPosition as CP
+import qualified Position as CP
 import qualified OrderStatus as OS
 import qualified ShowingStatus as ShS
 import qualified TreatmentTurns as TT
@@ -21,7 +21,7 @@ import qualified GameData as G
 iniTurnNumber :: TN.TurnNumber
 iniTurnNumber = 0
 
--- BattlefieldState = M.Map CP.CurrentPosition BS.BattlefieldSection
+-- BattlefieldState = M.Map CP.Position BS.BattlefieldSection
 iniBattleFieldState :: BState.BattlefieldState
 iniBattleFieldState = foldl
   (\list (piece,point) -> M.update (\_ -> Just piece) point list)
