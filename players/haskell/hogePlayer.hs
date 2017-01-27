@@ -5,23 +5,24 @@ import System.IO
 import qualified TurnInformation as T
 import qualified TurnNumber as TN
 import qualified Ordering as O
-import qualified GameData as G
+import qualified GameInformation as GI
+import qualified GameData as GD
 import qualified Weapon as W
 import qualified Action as A
 import qualified Direction as D
        
 main :: IO ()
 main = do
-  gameInfo <- G.readGameInfo
-  G.acknowledgementResponseToTheGameInformation 
+  gameInfo <- GI.readGameInformation
+  GI.respondToTheGameInformation 
   mainLoop []
   return ()
 
-mainLoop :: [G.GameData] -> IO()
+mainLoop :: [GD.GameData] -> IO()
 mainLoop gds = do
-  gd <- fmap G.divideComponent $ sequence $ take 22 $ repeat getLine
+  gd <- fmap GD.divideComponent $ sequence $ take 22 $ repeat getLine
   O.sendOrderString $ detNextOrder (gd:gds)
-  if (TN.isFinalTurn $ G.getTurnNumber gd)
+  if (TN.isFinalTurn $ GD.getTurnNumber gd)
     then do
       hFlush stdout
       return ()
@@ -30,7 +31,7 @@ mainLoop gds = do
       mainLoop (gd:gds)
 
 -- TODO:: Implement!
-detNextOrder :: [G.GameData] -> O.Order
+detNextOrder :: [GD.GameData] -> O.Order
 detNextOrder gds = O.Order W.Spear [A.Occupy D.South]
 --detNextOrder gds = O.Order W.Spear [A.Occupy D.South, A.Move D.North]
 

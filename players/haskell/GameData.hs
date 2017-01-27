@@ -16,10 +16,6 @@ data GameData = GameData { getTurnNumber :: T.TurnNumber,
                            getSamuraiStates :: S.SamuraiStates,
                            getBattlefieldState :: B.BattlefieldState } deriving (Show,Eq,Ord)
 
-readGameInfo = getLine
-acknowledgementResponseToTheGameInformation :: IO ()
-acknowledgementResponseToTheGameInformation = putStrLn "0" >>= \_ -> hFlush stdout
-
 divideComponent :: [String] -> GameData
 divideComponent s = GameData
                     (stringToTurnNumber turnNumberString)
