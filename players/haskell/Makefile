@@ -16,6 +16,9 @@ hogePlayer: hogePlayer.hs
 	${HASK} ${HASKFLAGS} $^
 	mv $@ ../
 
+submit: hogePlayer.hs
+	${HASK} ${HASKFLAGS} $^
+
 clean:
 	rm -f ${TARGET}
 	rm -f *.o *.hi
