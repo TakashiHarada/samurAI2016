@@ -18,5 +18,5 @@ data SamuraiState
   deriving (Show,Eq,Ord)
 
 getSamuraiPosition :: (A.Army,W.Weapon) -> SamuraiStates -> CP.Position
-getSamuraiPosition s map = getPosition ss
-  where ss = (\(Just x) -> x) (M.lookup s map)
+getSamuraiPosition s hash = getPosition ss
+  where ss = (\(Just x) -> x) (M.lookup s hash)

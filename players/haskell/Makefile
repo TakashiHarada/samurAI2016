@@ -4,7 +4,7 @@
 #  1. modify this file
 #  2. modify ../players.txt
 
-HASKFLAGS= 
+HASKFLAGS= -Wall -O2 
 HASK= ghc
 
 TARGET= hogePlayer

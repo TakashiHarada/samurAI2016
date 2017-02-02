@@ -1,6 +1,5 @@
 module GameData where
 
-import System.IO
 import qualified TurnNumber as T
 import qualified SamuraiStates as S
 import qualified ShowingStatus as SS
@@ -10,7 +9,6 @@ import qualified OrderStatus as O
 import qualified Weapon as W
 import qualified Army as A
 import qualified Data.Map as M
-import Data.Char
 
 data GameData = GameData { getTurnNumber :: T.TurnNumber,
                            getSamuraiStates :: S.SamuraiStates,
@@ -30,7 +28,7 @@ divideComponent s = GameData
 stringToTurnNumber :: String -> T.TurnNumber
 stringToTurnNumber = read
 
-example = "14\n0 6 1 0 0\n1 14 0 0 0\n9 12 0 0 0\n-1 -1 1 0 0\n-1 -1 0 0 0\n-1 -1 1 0 0\n"
+-- example = "14\n0 6 1 0 0\n1 14 0 0 0\n9 12 0 0 0\n-1 -1 1 0 0\n-1 -1 0 0 0\n-1 -1 1 0 0\n"
 
 stringsToSamuraiStates :: [String] -> [((A.Army,W.Weapon),S.SamuraiState)]
 stringsToSamuraiStates str =  zip

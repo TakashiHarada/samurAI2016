@@ -6,10 +6,8 @@ import qualified SamuraiStates as SamuraiS
 import qualified Data.Map as M
 import qualified Army as A
 import qualified Weapon as W
-import qualified Position as CP
 import qualified OrderStatus as OS
 import qualified ShowingStatus as ShS
-import qualified TreatmentTurns as TT
 import qualified BattlefieldState as BState
 import qualified BattlefieldSection as BSection
 import qualified TurnNumber as TN

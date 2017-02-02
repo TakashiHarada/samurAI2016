@@ -12,3 +12,4 @@ showingStatusToInt Unkown = 1  -- for enemy samurai
 intToShowingStatus :: Int -> ShowingStatus
 intToShowingStatus 0 = Show
 intToShowingStatus 1 = Unkown
+intToShowingStatus _ = Unkown

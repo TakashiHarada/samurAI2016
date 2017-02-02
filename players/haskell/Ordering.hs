@@ -2,7 +2,6 @@ module Ordering where
 
 import qualified Action as A
 import qualified Weapon as W
-import qualified Direction as D
 import qualified GameData as G
 import Data.Char
 import System.IO
@@ -13,6 +12,7 @@ data Order = Order { getWeapon :: W.Weapon, getActions :: [A.Action] } deriving 
 --        Order W.Spear [A.Occupy D.South, A.Move D.North, A.Hide]
 --        Order W.Spear [A.Occupy D.South, A.Move D.North, A.Show]
 
+orderCostLimit :: Int
 orderCostLimit = 7
 
 sendOrderString :: Order -> IO()

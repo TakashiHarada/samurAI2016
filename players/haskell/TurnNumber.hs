@@ -2,7 +2,10 @@ module TurnNumber where
 
 type TurnNumber = Int
 
+final1 :: TurnNumber
 final1 = 95
+
+final2 :: TurnNumber
 final2 = 96
 
 isFinalTurn :: TurnNumber -> Bool
