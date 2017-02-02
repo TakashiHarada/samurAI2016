@@ -3,6 +3,7 @@ module Ordering where
 import qualified Action as A
 import qualified Weapon as W
 import qualified Direction as D
+import qualified GameData as G
 import Data.Char
 import System.IO
 
@@ -21,3 +22,11 @@ sendOrderString (Order w as) = do
 
 orderCost :: Order -> Int
 orderCost order = sum $ map A.actionCost (getActions order)
+
+-- 命令 o によって占領する区画の数を得る函数
+occupiedSections :: G.GameData -> Order -> Int
+occupiedSections gd o = undefined
+
+-- 命令 o によって敵から奪う区画の数を得る函数
+takeSections :: G.GameData -> Order -> Int
+takeSections = undefined
