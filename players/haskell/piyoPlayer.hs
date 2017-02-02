@@ -33,34 +33,34 @@ mainLoop gds = do
 -- TODO:: Implement!
 detNextOrder :: [GD.GameData] -> O.Order
 detNextOrder (gd:gds) = case GD.getTurnNumber gd of
-  1 -> turn1
-  3 -> turn3
-  5 -> turn5
-  7 -> turn7
-  9 -> turn9
-  11 -> turn11  
-  13 -> turn13
-  15 -> turn15
-  17 -> turn17
+  0 -> turn0
+  2 -> turn2
+  4 -> turn4
+  6 -> turn6
+  8 -> turn8
+  10 -> turn12  
+  12 -> turn12
+  14 -> turn14
+  16 -> turn16
   x -> turn x
 --detNextOrder gds = O.Order W.Spear [A.Occupy D.South, A.Move D.North]
 --hogeTurn :: Int -> O.Order
 
-turn1 = O.Order W.Spear [A.Occupy D.East, A.Move D.East]
-turn3 = O.Order W.Axe [A.Move D.South, A.Move D.West, A.Move D.West]
-turn5 = O.Order W.Swords [A.Move D.East, A.Move D.East, A.Move D.East]
+turn0 = O.Order W.Spear [A.Occupy D.East, A.Move D.East]
+turn2 = O.Order W.Axe [A.Move D.South, A.Move D.West, A.Move D.West]
+turn4 = O.Order W.Swords [A.Move D.East, A.Move D.East, A.Move D.East]
 
-turn7 = O.Order W.Spear [A.Move D.East, A.Move D.East, A.Move D.East]
-turn9 = O.Order W.Axe [A.Move D.South, A.Occupy D.West]
-turn11 = O.Order W.Swords [A.Move D.East, A.Move D.East, A.Move D.East]
+turn6 = O.Order W.Spear [A.Move D.East, A.Move D.East, A.Move D.East]
+turn8 = O.Order W.Axe [A.Move D.South, A.Occupy D.West]
+turn10 = O.Order W.Swords [A.Move D.East, A.Move D.East, A.Move D.East]
 
-turn13 = O.Order W.Spear [A.Move D.South, A.Occupy D.West]
-turn15 = O.Order W.Axe [A.Move D.South, A.Occupy D.West]
-turn17 = O.Order W.Swords [A.Move D.South, A.Occupy D.South]
+turn12 = O.Order W.Spear [A.Move D.South, A.Occupy D.West]
+turn14 = O.Order W.Axe [A.Move D.South, A.Occupy D.West]
+turn16 = O.Order W.Swords [A.Move D.South, A.Occupy D.South]
 
-turn x | x `mod` 6 == 1 = O.Order W.Spear [A.Move D.South, A.Occupy D.West]
-       | x `mod` 6 == 3 = O.Order W.Axe [A.Move D.South, A.Occupy D.West]
-       | x `mod` 6 == 5 = O.Order W.Swords [A.Move D.South, A.Occupy D.South]
+turn x | x `mod` 6 == 0 = O.Order W.Spear [A.Move D.South, A.Occupy D.West]
+       | x `mod` 6 == 2 = O.Order W.Axe [A.Move D.South, A.Occupy D.West]
+       | x `mod` 6 == 4 = O.Order W.Swords [A.Move D.East, A.Occupy D.South]
        | otherwise = O.Order W.Spear [A.Move D.South, A.Occupy D.West]
 
 hoge = ["14",
