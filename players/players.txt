@@ -5,3 +5,4 @@ players
 4 timeout timeoutPlayer $1
 5 "too active" tooActivePlayer $1
 6 Nobushige hogePlayer $1
+7 Ishikawa ishikawaPlayer $1
