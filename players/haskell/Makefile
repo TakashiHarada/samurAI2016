@@ -7,12 +7,16 @@
 HASKFLAGS= -Wall -O2 
 HASK= ghc
 
-TARGET= hogePlayer
+TARGET= hogePlayer piyoPlayer
 
 all: ${TARGET}
 
 # This would be changed. (compile all players at once?)
 hogePlayer: hogePlayer.hs
+	${HASK} ${HASKFLAGS} $^
+	mv $@ ../
+
+piyoPlayer: piyoPlayer.hs
 	${HASK} ${HASKFLAGS} $^
 	mv $@ ../
 
