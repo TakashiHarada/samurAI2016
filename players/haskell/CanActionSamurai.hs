@@ -10,7 +10,12 @@ import qualified SamuraiStates as SS
 --                            getSamuraiStates :: S.SamuraiStates,
 --                            getBattlefieldState :: B.BattlefieldState }
 
--- 次のターンに攻撃可能な敵を列挙
-canActionEnemy :: G.GameData -> [W.Weapon]
-canActionEnemy (G.GameData 95 ss _) = [] -- 最終ターンなので相手に次のターンはない
-canActionEnemy (G.GameData _ ss _)  = map snd $ filter (\x -> OS.Yet == SS.getSamuraiOrderStatus x ss) [(A.Enemy,W.Spear), (A.Enemy,W.Swords), (A.Enemy,W.Axe)]
+-- 次のターンに行動可能な敵を列挙
+canActionEnemy :: SS.SamuraiStates -> [(A.Army,W.Weapon)]
+canActionEnemy ss = filter (\x -> OS.Yet == SS.getSamuraiOrderStatus x ss) [(A.Enemy,W.Spear), (A.Enemy,W.Swords), (A.Enemy,W.Axe)]
+--canActionEnemy :: SS.SamuraiStates -> [W.Weapon]
+--canActionEnemy ss = map snd $ filter (\x -> OS.Yet == SS.getSamuraiOrderStatus x ss) [(A.Enemy,W.Spear), (A.Enemy,W.Swords), (A.Enemy,W.Axe)]
+
+-- 現在のターンに行動可能な味方を列挙
+canActionFriend :: SS.SamuraiStates -> [(A.Army,W.Weapon)]
+canActionFriend ss = filter (\x -> OS.Yet == SS.getSamuraiOrderStatus x ss) [(A.Friend,W.Spear), (A.Friend,W.Swords), (A.Friend,W.Axe)]

@@ -12,12 +12,12 @@ import qualified SamuraiStates as SS
 
 -- import Test.QuickCheck
 
--- If we attack the Enemy X then True else False, where X is a Weapon.
-canAttackX :: W.Weapon -> G.GameData -> Bool
-canAttackX w (G.GameData _ ss bs) = undefined
+-- -- If we attack the Enemy X then True else False, where X is a Weapon.
+-- canAttack :: W.Weapon -> G.GameData -> Bool
+-- canAttack w (G.GameData _ ss bs) = undefined
 
-canAttackSomebody :: G.GameData -> Bool
-canAttackSomebody (G.GameData _ ss bs) = undefined
+-- canAttackSomebody :: G.GameData -> Bool
+-- canAttackSomebody (G.GameData _ ss bs) = undefined
 
 getAttackableArea :: W.Weapon -> P.Position -> [P.Position]
 getAttackableArea w c = P.removeOutOfBoard $ getAttackableArea' w c
