@@ -15,3 +15,8 @@ actionID :: Action -> Int
 actionID (Occupy d) = D.directionID d
 actionID (Move d) = 4 + D.directionID d
 actionID _ = 9
+
+reverse :: Action -> Action
+reverse (Occupy d) = Occupy (D.reverse d)
+reverse (Move d)   = Move   (D.reverse d)
+reverse a = a

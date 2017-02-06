@@ -3,6 +3,7 @@ module Ordering where
 import qualified Action as A
 import qualified Weapon as W
 import qualified GameData as G
+import qualified GameInformation as GI
 import Data.Char
 import System.IO
 
@@ -30,3 +31,7 @@ occupiedSections gd o = undefined
 -- 命令 o によって敵から奪う区画の数を得る函数
 takeSections :: G.GameData -> Order -> Int
 takeSections = undefined
+
+reverseOrder :: GI.GameInformation -> Order -> Order
+reverseOrder GI.First  x = x
+reverseOrder GI.Second (Order w as) = Order w (map A.reverse as)
