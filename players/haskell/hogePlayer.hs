@@ -9,33 +9,36 @@ import qualified GameInformation as GI
 import qualified GameData as GD
 import qualified Weapon as W
 import qualified Action as A
+import qualified Army as Army
 import qualified Direction as D
---import qualified Position as P
+import qualified Position as P
+import qualified HomePosition as HP
        
 main :: IO ()
 main = do
   gameInfo <- GI.readGameInformation
   GI.respondToTheGameInformation 
-  mainLoop [] gameInfo
+  mainLoop [] gameInfo (HP.getInitHomePosition gameInfo)
   return ()
 
-mainLoop :: [GD.GameData] -> GI.GameInformation -> IO()
-mainLoop gds gi = do
+mainLoop :: [GD.GameData] -> GI.GameInformation -> P.EnemyPosition -> IO()
+mainLoop gds gi epos = do
   gd <- fmap GD.divideComponent $ sequence $ take 22 $ repeat getLine
-  O.sendOrderString $ O.reverseOrder gi $ detNextOrder (gd:gds)
+  --  O.sendOrderString $ O.reverseOrder gi $ detNextOrder (gd:gds) gi
+  O.sendOrderString $ detNextOrder (gd:gds) gi
   if (TN.isFinalTurn $ GD.getTurnNumber gd)
     then do
       hFlush stdout
       return ()
     else do
       hFlush stdout
-      mainLoop (gd:gds) gi
+      mainLoop (gd:gds) gi epos
 
-detNextOrder :: [GD.GameData] -> O.Order
-detNextOrder (gd:gds) = case (GD.getTurnNumber gd) `mod` 3 of
-  0 -> O.Order W.Spear  [A.Move D.East, A.Occupy D.South]
-  1 -> O.Order W.Swords [A.Move D.South, A.Occupy D.South]
-  2 -> O.Order W.Axe [A.Occupy D.South, A.Move D.East]
+detNextOrder :: [GD.GameData] -> GI.GameInformation -> O.Order
+detNextOrder (gd:gds) gi = case (GD.getTurnNumber gd) `mod` 3 of
+  0 -> O.reverseOrder gi $ O.Order W.Spear  [A.Move D.East, A.Occupy D.South]
+  1 -> O.reverseOrder gi $ O.Order W.Swords [A.Move D.East, A.Occupy D.South]
+  2 -> O.reverseOrder gi $ O.Order W.Axe [A.Occupy D.West, A.Move D.East]
 --detNextOrder gds = O.Order W.Spear [A.Occupy D.South, A.Move D.North]
 
 inputExample :: [String]

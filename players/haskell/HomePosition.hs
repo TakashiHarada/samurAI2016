@@ -5,6 +5,9 @@ import Weapon
 import Army
 import GameInformation
 
+getInitHomePosition :: GameInformation -> (Position,Position,Position)
+getInitHomePosition gi = ((\(a:b:[c]) -> (a,b,c)) $ map (\w -> getHomePosition Enemy w gi) [Spear, Swords, Axe])
+  
 getHomePosition :: Army -> Weapon -> GameInformation -> Position
 getHomePosition Friend Spear  First  = friendSpearHome
 getHomePosition Friend Spear  Second = enemySpearHome
