@@ -19,6 +19,9 @@ import qualified SamuraiStates as SS
 -- canAttackSomebody :: G.GameData -> Bool
 -- canAttackSomebody (G.GameData _ ss bs) = undefined
 
+-- TODO:: Implement? 
+-- hoge :: W.Weapon -> P.Position -> [(O.Order, [P.Position])] 
+
 getAttackableArea :: W.Weapon -> P.Position -> [P.Position]
 getAttackableArea w c = P.removeOutOfBoard $ getAttackableArea' w c
 
