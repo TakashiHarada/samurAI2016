@@ -10,6 +10,8 @@ import qualified Weapon as W
 import qualified Army as A
 import qualified Data.Map as M
 
+-- This is "Turn Information" on the manual.
+-- We rename it to "GameData" for convenience (?)
 data GameData = GameData { getTurnNumber :: T.TurnNumber,
                            getSamuraiStates :: S.SamuraiStates,
                            getBattlefieldState :: B.BattlefieldState } deriving (Show,Eq,Ord)
