@@ -1,6 +1,7 @@
 module Ordering where
 
 import qualified Action as A
+import qualified Direction as D
 import qualified Weapon as W
 import qualified GameData as G
 import qualified GameInformation as GI
@@ -11,8 +12,8 @@ data Order = Order { getWeapon :: W.Weapon, getActions :: [A.Action] } deriving 
 
 -- e.g. : Order W.Spear [A.Occupy D.South]
 --        Order W.Spear [A.Occupy D.South, A.Move D.North, A.Hide]
---        Order W.Spear [A.Occupy D.South, A.Move D.North, A.Show]
-
+--        Order W.Spear [A.Occupy D.South, A.Move D.North, A.Show]              
+                 
 orderCostLimit :: Int
 orderCostLimit = 7
 
