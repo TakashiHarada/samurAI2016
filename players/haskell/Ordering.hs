@@ -1,5 +1,6 @@
 module Ordering where
 
+import qualified Position as P
 import qualified Action as A
 import qualified Direction as D
 import qualified Weapon as W
@@ -25,13 +26,20 @@ sendOrderString (Order w as) = do
 orderCost :: Order -> Int
 orderCost order = sum $ map A.actionCost (getActions order)
 
--- 命令 o によって占領する区画の数を得る函数
-occupiedSections :: G.GameData -> Order -> Int
-occupiedSections gd o = undefined
+-- 命令 o によって占領する区画
+-- （新たに得る区画の数）+（敵から奪う区画の数）
+-- を得る函数
+--occupiedSections :: G.GameData -> Order -> Int
+--occupiedSections gd o = undefined
+getGainArea :: G.GameData -> Order -> Int
+getGainArea = undefined
 
 -- 命令 o によって敵から奪う区画の数を得る函数
-takeSections :: G.GameData -> Order -> Int
-takeSections = undefined
+-- takeSections :: G.GameData -> Order -> Int
+-- takeSections = undefined
+
+move :: Order -> P.Position -> P.Position
+move = undefined
 
 reverseOrder :: GI.GameInformation -> Order -> Order
 reverseOrder GI.First  x = x
