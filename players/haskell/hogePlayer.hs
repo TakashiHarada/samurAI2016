@@ -41,6 +41,16 @@ detNextOrder (gd:gds) gi = case (GD.getTurnNumber gd) `mod` 3 of
   2 -> O.reverseOrder gi $ O.Order W.Axe [A.Occupy D.West, A.Move D.East]
 --detNextOrder gds = O.Order W.Spear [A.Occupy D.South, A.Move D.North]
 
+{-
+TODO::
+ 1. list-up available one order from current GameData with the following evaluation strategy.
+    Evaluation Strategy
+     e.g.
+     * check existence of attackableEnemy. (if yes, return [Order])
+     * size of occupation area
+     * whether some Friend is in danger or not.
+-}
+
 inputExample :: [String]
 inputExample =
   ["14",
