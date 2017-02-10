@@ -16,6 +16,7 @@ import qualified SamuraiStates as SS
 import qualified CanActionSamurai as CAS
 import qualified GetShowingEnemy as GS
 import qualified Ordering as O
+import qualified ValidMove as VM
 
 -- 区画 p は武器 w の味方が次の相手のターンで敵に攻撃され得る区画か否かを判定する函数
 -- p が攻撃され得る区画ならば True，安全ならば False
@@ -34,12 +35,12 @@ willBeAttacked :: GD.GameData -> O.Order -> P.EnemyPosition -> GI.GameInformatio
 willBeAttacked (GD.GameData tn _ _) (O.Order w as) _ _ | tn == 95 = False -- 最終ターンの次ターンは存在しない
 willBeAttacked (GD.GameData _ ss bs) (O.Order w as) epos gi = or [oneIsDanger,twoIsDanger,actorIsDanger]
   where nws = delete w [W.Spear, W.Swords, W.Axe] -- 動作しない侍のリスト
-        wpos = SS.getSamuraiPosition (A.Friend,w) ss -- 動作する侍 A のPosition
+        wpos = SS.getSamuraiPosition (A.Friend,w) ss -- 動作する侍 のPosition
         one = SS.getSamuraiPosition (A.Friend,head nws) ss -- 動作しない侍 A のPosition
         two = SS.getSamuraiPosition (A.Friend,last nws) ss -- 動作しない侍 B のPosition
         oneIsDanger = isDangerousPosition one (head nws) ss epos gi -- 動作しない侍 A が攻撃されうるならば True
         twoIsDanger = isDangerousPosition two (last nws) ss epos gi -- 動作しない侍 B が攻撃されうるならば True
-        actorIsDanger = isDangerousPosition (O.move (O.Order w as) wpos) w ss epos gi -- 動作しない侍 B が攻撃されうるならば True
+        actorIsDanger = isDangerousPosition (O.move (O.Order w as) wpos) w ss epos gi -- 動作する侍が攻撃されうるならば True
 
 
 -- 次の相手のターンで敵が攻撃可能な区画の全てを返す函数

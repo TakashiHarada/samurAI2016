@@ -25,23 +25,3 @@ reverse a = a
 isMoveAction :: Action -> Bool
 isMoveAction (Move _) = True
 isMoveAction _          = False
-
--- Position (x,y) に居る侍が Action によって移動する場所を返す函数
--- 途中枠外に出てしまう場合は Nothing を返す
--- 警告：この函数だと居館上も移動できないので改善が必要 2/9
-move :: Action -> P.Position -> Maybe P.Position
-move (Move D.South) (x,y)
-  | y+1 <= 14 = Just (x,y+1)
-  | otherwise = Nothing
-move (Move D.East) (x,y)
-  | x+1 <= 14 = Just (x+1,y)
-  | otherwise = Nothing
-move (Move D.North) (x,y)
-  | 0 <= y-1  = Just (x,y-1)
-  | otherwise = Nothing
-move (Move D.West) (x,y)
-  | 0 <= x-1  = Just (x-1,y)
-  | otherwise = Nothing
-move _ (x,y)              = Just (x,y)
-
--- return (0,0) >>= move (Move D.East) >>= move (Move D.South)

@@ -38,8 +38,10 @@ getGainArea = undefined
 -- takeSections :: G.GameData -> Order -> Int
 -- takeSections = undefined
 
+-- 自身の居館以外に侵入するような命令は来ないと仮定している．
 move :: Order -> P.Position -> P.Position
-move = undefined
+move (Order _ []) (x,y)     = (x,y)
+move (Order _ (a:as)) (x,y) = undefined
 
 reverseOrder :: GI.GameInformation -> Order -> Order
 reverseOrder GI.First  x = x
