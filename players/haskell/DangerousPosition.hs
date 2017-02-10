@@ -40,7 +40,7 @@ willBeAttacked (GD.GameData _ ss bs) (O.Order w as) epos gi = or [oneIsDanger,tw
         two = SS.getSamuraiPosition (A.Friend,last nws) ss -- 動作しない侍 B のPosition
         oneIsDanger = isDangerousPosition one (head nws) ss epos gi -- 動作しない侍 A が攻撃されうるならば True
         twoIsDanger = isDangerousPosition two (last nws) ss epos gi -- 動作しない侍 B が攻撃されうるならば True
-        actorIsDanger = isDangerousPosition (O.move (O.Order w as) wpos) w ss epos gi -- 動作する侍が攻撃されうるならば True
+        actorIsDanger = isDangerousPosition (Action.move as wpos) w ss epos gi -- 動作する侍が攻撃されうるならば True
 
 
 -- 次の相手のターンで敵が攻撃可能な区画の全てを返す函数

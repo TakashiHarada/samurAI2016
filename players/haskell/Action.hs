@@ -25,3 +25,13 @@ reverse a = a
 isMoveAction :: Action -> Bool
 isMoveAction (Move _) = True
 isMoveAction _          = False
+
+-- 自身の居館以外に侵入するような命令は来ないと仮定している．
+--  --> ValidMove module の validMove を使う
+move :: [Action] -> P.Position -> P.Position
+move [] (x,y) = (x,y)
+move ((Move D.South):as) (x,y) = move as (x,y+1)
+move ((Move D.East):as)  (x,y) = move as (x+1,y)
+move ((Move D.North):as) (x,y) = move as (x,y-1)
+move ((Move D.West):as)  (x,y) = move as (x-1,y)
+move (_:as) (x,y) = move as (x,y)

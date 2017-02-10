@@ -14,8 +14,8 @@ import qualified HomePosition as HP
 -- 与えられた命令は，移動できない区画に移動している命令であるかを判定する函数
 validMove :: P.Position -> [A.Action] -> W.Weapon -> GI.GameInformation -> Bool
 validMove (x,y) as w gi
-  | foldM (\p a -> moveMaybe p W.Swords GI.First a) (x,y) as /= Nothing = True
-  | otherwise                                                           = False
+  | foldM (\p a -> moveMaybe p w gi a) (x,y) as /= Nothing = True
+  | otherwise                                              = False
 
 moveMaybe :: P.Position -> W.Weapon -> GI.GameInformation -> A.Action -> Maybe P.Position
 moveMaybe (x,y) w gi (A.Move D.South)
