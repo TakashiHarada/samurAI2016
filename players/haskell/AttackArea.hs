@@ -8,6 +8,13 @@ import qualified GameData as G
 import qualified Ordering as O
 import Data.Char
 
+isAttackOrder :: P.Position -> O.Order -> Bool
+isAttackOrder pos o = pos `elem` (attackArea pos o)
+
+isAttackOrder3 :: P.EnemyPosition -> P.Position -> O.Order -> Bool
+isAttackOrder3 (e1,e2,e3) pos o = e1 `elem` aa || e2 `elem` aa || e3 `elem` aa
+  where aa = attackArea pos o
+
 attackArea :: P.Position -> O.Order -> [P.Position]
 attackArea _ (O.Order _ []) = []
 --attackArea (x,y) _ | not(0 <= x && x <= 14) || not(0 <= y && y <= 14) = []

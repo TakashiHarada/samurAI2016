@@ -6,6 +6,8 @@ import qualified Weapon as W
 import qualified GameData as G
 import qualified Ordering as O
 import qualified MovableArea as M
+import qualified DangerousPosition as DP
+import qualified ValidMove as VM
 
 import Data.Char
 

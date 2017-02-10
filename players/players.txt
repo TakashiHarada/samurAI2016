@@ -6,3 +6,4 @@ players
 5 "too active" tooActivePlayer $1
 6 Nobushige hogePlayer $1
 7 Nobunaga piyoPlayer $1
+8 Yoshiie fooPlayer $1
