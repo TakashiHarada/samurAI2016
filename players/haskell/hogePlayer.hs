@@ -20,6 +20,7 @@ import qualified SamuraiStates as SS
 import qualified AttackArea as AA
 import qualified GuessPosition as GP
 import qualified DangerousPosition as DP
+import qualified HideShow as HS
 
 main :: IO ()
 main = do
@@ -63,12 +64,12 @@ detNextOrder ((GD.GameData tn ss bs):gds) epos' gi = case tn of                 
   16 -> O.Order W.Swords [A.Move D.South, A.Occupy D.South]
   17 -> O.reverseOrder gi $ O.Order W.Swords [A.Move D.South, A.Occupy D.South]
   _  -> if (not . null) willAttackOrders -- 敵を攻撃する命令があるか？
-       then head willAttackOrders
+       then HS.addHideOrShow ss (head willAttackOrders)
        else 
          if (not . null) notAttackedOrder    -- 占領命令の中で敵に攻撃されない命令があるか？
-         then head notAttackedOrder
+         then HS.addHideOrShow ss (head notAttackedOrder)
          else
-           head attackOrders'
+           HS.addHideOrShow ss (head attackOrders')
   where
     actors = CAS.canActionFriend ss                    -- 行動可能な侍の（軍，武器）のリスト
     attackOrders = GO.oms $ map (\(_,y) -> y) actors   -- 占領命令を含む命令のリスト

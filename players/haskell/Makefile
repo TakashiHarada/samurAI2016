@@ -7,7 +7,8 @@
 HASKFLAGS= -Wall -O2 
 HASK= ghc
 
-TARGET= hogePlayer piyoPlayer
+# TARGET= hogePlayer piyoPlayer
+TARGET= hogePlayer
 
 all: ${TARGET}
 
@@ -16,9 +17,9 @@ hogePlayer: hogePlayer.hs
 	${HASK} ${HASKFLAGS} $^
 	mv $@ ../
 
-piyoPlayer: piyoPlayer.hs
-	${HASK} ${HASKFLAGS} $^
-	mv $@ ../
+# piyoPlayer: piyoPlayer.hs
+#	${HASK} ${HASKFLAGS} $^
+#	mv $@ ../
 
 submit: hogePlayer.hs
 	${HASK} ${HASKFLAGS} $^
