@@ -6,5 +6,5 @@ import qualified BattlefieldSection as BS
 
 type BattlefieldState = M.Map P.Position BS.BattlefieldSection
 
---diffBattlefieldState :: B.BattlefieldState -> B.BattlefieldState -> B.BattlefieldState
---diffBattlefieldState old new = 
+diffBattlefieldState :: BattlefieldState -> BattlefieldState -> BattlefieldState
+diffBattlefieldState old new = new

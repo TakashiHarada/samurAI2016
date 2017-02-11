@@ -19,6 +19,8 @@ import qualified CanActionSamurai as CAS
 import qualified SamuraiStates as SS
 import qualified AttackArea as AA
 import qualified GuessPosition as GP
+import qualified DangerousPosition as DP
+import qualified HideShow as HS
 
 main :: IO ()
 main = do
@@ -39,10 +41,10 @@ mainLoop gds gi epos = do
       hFlush stdout
       mainLoop (gd:gds) gi epos'
   where
-    epos' = GP.guessEnemyPositions gds epos
+    epos' = GP.guessEnemyPositions gi gds epos
 
 detNextOrder :: [GD.GameData] -> P.EnemyPosition -> GI.GameInformation -> O.Order
-detNextOrder ((GD.GameData tn ss bs):gds) epos' gi = case tn of                 -- 最初の2ピリオド（6ターンは決め打）
+detNextOrder ((GD.GameData tn ss bs):gds) epos' gi = case tn of                 -- 最初の3ピリオド（18ターンは決め打）
   0  -> O.Order W.Spear [A.Occupy D.East, A.Move D.East]
   1  -> O.reverseOrder gi $ O.Order W.Spear [A.Occupy D.East, A.Move D.East]
   2  -> O.Order W.Axe [A.Move D.South, A.Move D.West, A.Move D.West]
@@ -61,23 +63,23 @@ detNextOrder ((GD.GameData tn ss bs):gds) epos' gi = case tn of                 
   15 -> O.reverseOrder gi $ O.Order W.Axe [A.Move D.South, A.Occupy D.West]
   16 -> O.Order W.Swords [A.Move D.South, A.Occupy D.South]
   17 -> O.reverseOrder gi $ O.Order W.Swords [A.Move D.South, A.Occupy D.South]
-  _  -> if (not . null) willAttackOrder -- 敵を攻撃する命令があるか？
-       then head validAttackOrders
+  _  -> if (not . null) willAttackOrders -- 敵を攻撃する命令があるか？
+       then HS.addHideOrShow ss (head willAttackOrders)
        else 
-         -- if undefined    -- 敵に攻撃される命令があるか？
-         -- then undefined
-         -- else undefined
-          case tn `mod` 3 of 
-            0 -> O.reverseOrder gi $ O.Order W.Spear [A.Move D.South, A.Occupy D.West]
-            1 -> O.reverseOrder gi $ O.Order W.Axe [A.Move D.South, A.Occupy D.South]
-            2 -> O.reverseOrder gi $ O.Order W.Swords [A.Move D.East, A.Occupy D.South]
-    where
-      actors = CAS.canActionFriend ss                    -- 行動可能な侍の（軍，武器）のリスト
-      attackOrders = GO.oms $ map (\(_,y) -> y) actors   -- 占領命令を含む命令のリスト
-      -- その内正しいmoveを行う命令のリスト --
-      validAttackOrders = filter (\(O.Order w as) -> VM.validMove (SS.getSamuraiPosition (Army.Friend,w) ss) as w gi) attackOrders
-      -- さらにその中で敵を攻撃する命令のリスト --
-      willAttackOrder = filter (\(O.Order w as) -> AA.isAttackOrder3 epos' (SS.getSamuraiPosition (Army.Friend,w) ss) (O.Order w as)) validAttackOrders 
+         if (not . null) notAttackedOrder    -- 占領命令の中で敵に攻撃されない命令があるか？
+         then HS.addHideOrShow ss (head notAttackedOrder)
+         else
+           HS.addHideOrShow ss (head attackOrders')
+  where
+    actors = CAS.canActionFriend ss                    -- 行動可能な侍の（軍，武器）のリスト
+    attackOrders = GO.oms $ map (\(_,y) -> y) actors   -- 占領命令を含む命令のリスト
+    -- その内正しいmoveを行う命令のリスト --
+    validAttackOrders = filter (\(O.Order w as) -> VM.validMove (SS.getSamuraiPosition (Army.Friend,w) ss) as w gi) attackOrders
+    -- さらにその中で敵を攻撃する命令のリスト --
+    willAttackOrders = filter (\(O.Order w as) -> AA.isAttackOrder3 epos' (SS.getSamuraiPosition (Army.Friend,w) ss) (O.Order w as)) validAttackOrders
+    spearOrder = O.reverseOrder gi $ O.Order W.Spear [A.Move D.South, A.Occupy D.West] -- 槍だけは基本的にこの命令を実行
+    attackOrders' = if (Army.Friend,W.Spear) `elem` actors then spearOrder:validAttackOrders else validAttackOrders
+    notAttackedOrder = filter (\order -> DP.willBeAttacked ss order epos' gi) attackOrders'
 {-
 TODO::
  1. list-up available one order from current GameData with the following evaluation strategy.

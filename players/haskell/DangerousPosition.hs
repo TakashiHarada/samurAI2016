@@ -31,9 +31,8 @@ isDangerousPosition p w ss epos gi
 
 -- 命令 o によって，攻撃を受ける可能性のある侍がいるかを判定する函数
 -- O.move 未実装 2/9
-willBeAttacked :: GD.GameData -> O.Order -> P.EnemyPosition -> GI.GameInformation -> Bool
-willBeAttacked (GD.GameData tn _ _) (O.Order w as) _ _ | tn == 95 = False -- 最終ターンの次ターンは存在しない
-willBeAttacked (GD.GameData _ ss bs) (O.Order w as) epos gi = or [oneIsDanger,twoIsDanger,actorIsDanger]
+willBeAttacked :: SS.SamuraiStates -> O.Order -> P.EnemyPosition -> GI.GameInformation -> Bool
+willBeAttacked ss (O.Order w as) epos gi = or [oneIsDanger,twoIsDanger,actorIsDanger]
   where nws = delete w [W.Spear, W.Swords, W.Axe] -- 動作しない侍のリスト
         wpos = SS.getSamuraiPosition (A.Friend,w) ss -- 動作する侍 のPosition
         one = SS.getSamuraiPosition (A.Friend,head nws) ss -- 動作しない侍 A のPosition
@@ -41,6 +40,17 @@ willBeAttacked (GD.GameData _ ss bs) (O.Order w as) epos gi = or [oneIsDanger,tw
         oneIsDanger = isDangerousPosition one (head nws) ss epos gi -- 動作しない侍 A が攻撃されうるならば True
         twoIsDanger = isDangerousPosition two (last nws) ss epos gi -- 動作しない侍 B が攻撃されうるならば True
         actorIsDanger = isDangerousPosition (Action.move as wpos) w ss epos gi -- 動作する侍が攻撃されうるならば True
+
+-- willBeAttacked :: GD.GameData -> O.Order -> P.EnemyPosition -> GI.GameInformation -> Bool
+-- willBeAttacked (GD.GameData tn _ _) (O.Order w as) _ _ | tn == 95 = False -- 最終ターンの次ターンは存在しない
+-- willBeAttacked (GD.GameData _ ss bs) (O.Order w as) epos gi = or [oneIsDanger,twoIsDanger,actorIsDanger]
+--   where nws = delete w [W.Spear, W.Swords, W.Axe] -- 動作しない侍のリスト
+--         wpos = SS.getSamuraiPosition (A.Friend,w) ss -- 動作する侍 のPosition
+--         one = SS.getSamuraiPosition (A.Friend,head nws) ss -- 動作しない侍 A のPosition
+--         two = SS.getSamuraiPosition (A.Friend,last nws) ss -- 動作しない侍 B のPosition
+--         oneIsDanger = isDangerousPosition one (head nws) ss epos gi -- 動作しない侍 A が攻撃されうるならば True
+--         twoIsDanger = isDangerousPosition two (last nws) ss epos gi -- 動作しない侍 B が攻撃されうるならば True
+--         actorIsDanger = isDangerousPosition (Action.move as wpos) w ss epos gi -- 動作する侍が攻撃されうるならば True
 
 
 -- 次の相手のターンで敵が攻撃可能な区画の全てを返す函数
