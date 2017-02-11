@@ -30,17 +30,19 @@ main = do
 mainLoop :: [GD.GameData] -> GI.GameInformation -> P.EnemyPosition -> IO()
 mainLoop gds gi epos = do
   gd <- fmap GD.divideComponent $ sequence $ take 22 $ repeat getLine
-  O.sendOrderString $ detNextOrder (gd:gds) epos gi
+  O.sendOrderString $ detNextOrder (gd:gds) epos' gi
   if (TN.isFinalTurn $ GD.getTurnNumber gd)
     then do
       hFlush stdout
       return ()
     else do
       hFlush stdout
-      mainLoop (gd:gds) gi epos
+      mainLoop (gd:gds) gi epos'
+  where
+    epos' = GP.guessEnemyPositions gds epos
 
 detNextOrder :: [GD.GameData] -> P.EnemyPosition -> GI.GameInformation -> O.Order
-detNextOrder ((GD.GameData tn ss bs):gds) (e1,e2,e3) gi = case tn of                 -- 最初の2ピリオド（6ターンは決め打）
+detNextOrder ((GD.GameData tn ss bs):gds) epos' gi = case tn of                 -- 最初の2ピリオド（6ターンは決め打）
   0  -> O.Order W.Spear [A.Occupy D.East, A.Move D.East]
   1  -> O.reverseOrder gi $ O.Order W.Spear [A.Occupy D.East, A.Move D.East]
   2  -> O.Order W.Axe [A.Move D.South, A.Move D.West, A.Move D.West]
@@ -70,10 +72,6 @@ detNextOrder ((GD.GameData tn ss bs):gds) (e1,e2,e3) gi = case tn of            
             1 -> O.reverseOrder gi $ O.Order W.Axe [A.Move D.South, A.Occupy D.South]
             2 -> O.reverseOrder gi $ O.Order W.Swords [A.Move D.East, A.Occupy D.South]
     where
-      epos'
-        = (GP.guessPosition W.Spear ((GD.GameData tn ss bs):gds) e1,   -- 敵の槍の位置を推測
-           GP.guessPosition W.Swords ((GD.GameData tn ss bs):gds) e2,  -- 敵の剣の位置を推測
-           GP.guessPosition W.Axe ((GD.GameData tn ss bs):gds) e3)     -- 敵の斧の位置を推測
       actors = CAS.canActionFriend ss                    -- 行動可能な侍の（軍，武器）のリスト
       attackOrders = GO.oms $ map (\(_,y) -> y) actors   -- 占領命令を含む命令のリスト
       -- その内正しいmoveを行う命令のリスト --

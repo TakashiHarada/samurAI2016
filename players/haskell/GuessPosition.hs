@@ -14,6 +14,7 @@ import qualified ShowingStatus as Sh
 import qualified SamuraiStates as SS
 import qualified CanActionSamurai as CAS
 import qualified GetShowingEnemy as GS
+import qualified BattlefieldState as B
 
 -- 武器 w の敵の位置を推測する函数
 -- 武器 w の敵が見えている(w == Sh.Show)場合は,見えている位置を返す
@@ -24,9 +25,12 @@ guessPosition w ((GD.GameData tn ss bs):gds) p
        else guessPositionFromLog w ((GD.GameData tn ss bs):gds) p
 
 -- if not Sh.Show. guess.
-guessPositionFromLog :: W.Weapon -> [GD.GameData] -> P.Position -> P.Position                                                
+guessPositionFromLog :: W.Weapon -> [GD.GameData] -> P.Position -> P.Position
 guessPositionFromLog w gds p = head (getMovablePositions p)
 -- FIXME:: 'head' should be changed!
 
 getMovablePositions :: P.Position -> [P.Position]
 getMovablePositions (x,y) = P.removeOutOfBoard [(x,y+1),(x,y-1),(x+1,y),(x-1,y)]
+
+guessEnemyPositions :: [GD.GameData] -> P.EnemyPosition -> P.EnemyPosition
+guessEnemyPositions gd old = old
