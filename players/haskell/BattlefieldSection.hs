@@ -22,6 +22,6 @@ stringToBattlefieldSection "2" = (Occupied A.Friend W.Axe)
 stringToBattlefieldSection "3" = (Occupied A.Enemy W.Spear)
 stringToBattlefieldSection "4" = (Occupied A.Enemy W.Swords)
 stringToBattlefieldSection "5" = (Occupied A.Enemy W.Axe)
-stringToBattlefieldSection "6" = NotOccupied
+stringToBattlefieldSection "8" = NotOccupied
 stringToBattlefieldSection "9" = NoInformation
 stringToBattlefieldSection _   = error "Error"

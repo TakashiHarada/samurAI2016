@@ -11,5 +11,5 @@ showingStatusToInt Unkown = 1
 
 intToShowingStatus :: Int -> ShowingStatus
 intToShowingStatus 0 = Show
-intToShowingStatus 1 = Unkown
+intToShowingStatus 1 = Hide
 intToShowingStatus _ = Unkown

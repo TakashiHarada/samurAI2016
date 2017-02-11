@@ -32,7 +32,7 @@ main = do
 mainLoop :: [GD.GameData] -> GI.GameInformation -> P.EnemyPosition -> IO()
 mainLoop gds gi epos = do
   gd <- fmap GD.divideComponent $ sequence $ take 22 $ repeat getLine
-  O.sendOrderString $ detNextOrder (gd:gds) epos' gi
+  O.sendOrderString $ detNextOrder gd epos' gi
   if (TN.isFinalTurn $ GD.getTurnNumber gd)
     then do
       hFlush stdout
@@ -43,8 +43,10 @@ mainLoop gds gi epos = do
   where
     epos' = GP.guessEnemyPositions gi gds epos
 
-detNextOrder :: [GD.GameData] -> P.EnemyPosition -> GI.GameInformation -> O.Order
-detNextOrder ((GD.GameData tn ss bs):gds) epos' gi = case tn of                 -- 最初の3ピリオド（18ターンは決め打）
+--detNextOrder :: [GD.GameData] -> P.EnemyPosition -> GI.GameInformation -> O.Order
+--detNextOrder ((GD.GameData tn ss bs):gds) epos' gi = case tn of                 -- 最初の3ピリオド（18ターンは決め打）
+detNextOrder :: GD.GameData -> P.EnemyPosition -> GI.GameInformation -> O.Order
+detNextOrder (GD.GameData tn ss bs) epos' gi = case tn of                 -- 最初の3ピリオド（18ターンは決め打）
   0  -> O.Order W.Spear [A.Occupy D.East, A.Move D.East]
   1  -> O.reverseOrder gi $ O.Order W.Spear [A.Occupy D.East, A.Move D.East]
   2  -> O.Order W.Axe [A.Move D.South, A.Move D.West, A.Move D.West]
@@ -90,30 +92,30 @@ TODO::
      * whether some Friend is in danger or not.
 -}
 
-inputExample :: [String]
-inputExample =
-  ["14",
-   "0 6 1 0 0",
-   "1 14 0 0 0",
-   "9 12 0 0 0",
-   "-1 -1 1 0 0",
-   "-1 -1 0 0 0",
-   "-1 -1 1 0 0",
-   "0 9 9 9 9 9 9 2 9 9 9 9 9 9 9",
-   "8 9 9 9 9 9 9 9 9 9 9 9 9 9 9",
-   "8 8 9 9 9 9 9 9 9 9 9 9 9 9 9",
-   "8 8 8 9 9 9 9 9 9 9 9 9 9 9 9",
-   "8 8 8 8 9 9 9 9 9 9 9 9 9 9 9",
-   "8 0 0 0 0 9 9 9 9 9 9 9 9 9 9",
-   "0 8 8 8 8 8 9 9 9 9 9 9 9 9 9",
-   "1 8 8 8 8 9 9 9 9 8 9 9 9 9 4",
-   "0 8 8 8 9 9 9 9 8 8 3 9 9 9 9",
-   "0 8 8 9 9 9 9 8 8 8 8 8 9 9 9",
-   "8 8 8 9 9 9 8 8 8 8 8 8 8 9 9",
-   "8 8 8 8 9 8 8 8 2 8 2 8 8 8 9",
-   "1 1 8 8 8 8 8 8 2 2 2 8 8 8 8",
-   "1 1 1 8 8 8 8 8 2 2 2 8 8 8 9",
-   "8 1 1 1 8 8 8 5 2 2 2 8 8 9 3"]
+-- inputExample :: [String]
+-- inputExample =
+--   ["14",
+--    "0 6 1 1 0",
+--    "1 14 0 1 0",
+--    "9 12 0 1 0",
+--    "-1 -1 1 0 0",
+--    "-1 -1 0 0 0",
+--    "-1 -1 1 0 0",
+--    "0 9 9 9 9 9 9 2 9 9 9 9 9 9 9",
+--    "8 9 9 9 9 9 9 9 9 9 9 9 9 9 9",
+--    "8 8 9 9 9 9 9 9 9 9 9 9 9 9 9",
+--    "8 8 8 9 9 9 9 9 9 9 9 9 9 9 9",
+--    "8 8 8 8 9 9 9 9 9 9 9 9 9 9 9",
+--    "8 0 0 0 0 9 9 9 9 9 9 9 9 9 9",
+--    "0 8 8 8 8 8 9 9 9 9 9 9 9 9 9",
+--    "1 8 8 8 8 9 9 9 9 8 9 9 9 9 4",
+--    "0 8 8 8 9 9 9 9 8 8 3 9 9 9 9",
+--    "0 8 8 9 9 9 9 8 8 8 8 8 9 9 9",
+--    "8 8 8 9 9 9 8 8 8 8 8 8 8 9 9",
+--    "8 8 8 8 9 8 8 8 2 8 2 8 8 8 9",
+--    "1 1 8 8 8 8 8 8 2 2 2 8 8 8 8",
+--    "1 1 1 8 8 8 8 8 2 2 2 8 8 8 9",
+--    "8 1 1 1 8 8 8 5 2 2 2 8 8 9 3"]
 
 {-
 An example of Turn Information
