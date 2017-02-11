@@ -46,6 +46,7 @@ moveMaybe (x,y) w gi (A.Move D.West)
     hp = \w -> HP.getHomePosition Army.Friend w gi
     pp = [(0,0),(0,7),(7,0),(14,14),(14,7),(7,14)]
     bad = \w -> delete (hp w) pp
+moveMaybe (x,y) w gi _ = Just (x,y)
 
 -- Position (x,y) に居る侍が Action によって移動する場所を返す函数
 -- 途中枠外に出てしまう場合は Nothing を返す

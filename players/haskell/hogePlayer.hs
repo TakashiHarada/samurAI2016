@@ -13,7 +13,13 @@ import qualified Army as Army
 import qualified Direction as D
 import qualified Position as P
 import qualified HomePosition as HP
-       
+import qualified ValidMove as VM
+import qualified GenerateOrder as GO
+import qualified CanActionSamurai as CAS
+import qualified SamuraiStates as SS
+import qualified AttackArea as AA
+import qualified GuessPosition as GP
+
 main :: IO ()
 main = do
   gameInfo <- GI.readGameInformation
@@ -24,8 +30,7 @@ main = do
 mainLoop :: [GD.GameData] -> GI.GameInformation -> P.EnemyPosition -> IO()
 mainLoop gds gi epos = do
   gd <- fmap GD.divideComponent $ sequence $ take 22 $ repeat getLine
-  --  O.sendOrderString $ O.reverseOrder gi $ detNextOrder (gd:gds) gi
-  O.sendOrderString $ detNextOrder (gd:gds) gi
+  O.sendOrderString $ detNextOrder (gd:gds) epos gi
   if (TN.isFinalTurn $ GD.getTurnNumber gd)
     then do
       hFlush stdout
@@ -34,13 +39,47 @@ mainLoop gds gi epos = do
       hFlush stdout
       mainLoop (gd:gds) gi epos
 
-detNextOrder :: [GD.GameData] -> GI.GameInformation -> O.Order
-detNextOrder (gd:gds) gi = case (GD.getTurnNumber gd) `mod` 3 of
-  0 -> O.reverseOrder gi $ O.Order W.Spear  [A.Move D.East, A.Occupy D.South]
-  1 -> O.reverseOrder gi $ O.Order W.Swords [A.Move D.East, A.Occupy D.South]
-  2 -> O.reverseOrder gi $ O.Order W.Axe [A.Occupy D.West, A.Move D.East]
---detNextOrder gds = O.Order W.Spear [A.Occupy D.South, A.Move D.North]
-
+detNextOrder :: [GD.GameData] -> P.EnemyPosition -> GI.GameInformation -> O.Order
+detNextOrder ((GD.GameData tn ss bs):gds) (e1,e2,e3) gi = case tn of                 -- 最初の2ピリオド（6ターンは決め打）
+  0  -> O.Order W.Spear [A.Occupy D.East, A.Move D.East]
+  1  -> O.reverseOrder gi $ O.Order W.Spear [A.Occupy D.East, A.Move D.East]
+  2  -> O.Order W.Axe [A.Move D.South, A.Move D.West, A.Move D.West]
+  3  -> O.reverseOrder gi $ O.Order W.Axe [A.Move D.South, A.Move D.West, A.Move D.West]
+  4  -> O.Order W.Swords [A.Move D.East, A.Move D.East, A.Move D.East]
+  5  -> O.reverseOrder gi $ O.Order W.Swords [A.Move D.East, A.Move D.East, A.Move D.East]
+  6  -> O.Order W.Spear [A.Move D.East, A.Move D.East, A.Move D.East]
+  7  -> O.reverseOrder gi $ O.Order W.Spear [A.Move D.East, A.Move D.East, A.Move D.East]
+  8  -> O.Order W.Axe [A.Move D.South, A.Occupy D.West]
+  9  -> O.reverseOrder gi $ O.Order W.Axe [A.Move D.South, A.Occupy D.West]
+  10 -> O.Order W.Swords [A.Move D.East, A.Move D.East, A.Move D.East]
+  11 -> O.reverseOrder gi $ O.Order W.Swords [A.Move D.East, A.Move D.East, A.Move D.East]
+  12 -> O.Order W.Spear [A.Move D.South, A.Occupy D.West]
+  13 -> O.reverseOrder gi $ O.Order W.Spear [A.Move D.South, A.Occupy D.West]
+  14 -> O.Order W.Axe [A.Move D.South, A.Occupy D.West]
+  15 -> O.reverseOrder gi $ O.Order W.Axe [A.Move D.South, A.Occupy D.West]
+  16 -> O.Order W.Swords [A.Move D.South, A.Occupy D.South]
+  17 -> O.reverseOrder gi $ O.Order W.Swords [A.Move D.South, A.Occupy D.South]
+  _  -> if (not . null) willAttackOrder -- 敵を攻撃する命令があるか？
+       then head validAttackOrders
+       else 
+         -- if undefined    -- 敵に攻撃される命令があるか？
+         -- then undefined
+         -- else undefined
+          case tn `mod` 3 of 
+            0 -> O.reverseOrder gi $ O.Order W.Spear [A.Move D.South, A.Occupy D.West]
+            1 -> O.reverseOrder gi $ O.Order W.Axe [A.Move D.South, A.Occupy D.South]
+            2 -> O.reverseOrder gi $ O.Order W.Swords [A.Move D.East, A.Occupy D.South]
+    where
+      epos'
+        = (GP.guessPosition W.Spear ((GD.GameData tn ss bs):gds) e1,   -- 敵の槍の位置を推測
+           GP.guessPosition W.Swords ((GD.GameData tn ss bs):gds) e2,  -- 敵の剣の位置を推測
+           GP.guessPosition W.Axe ((GD.GameData tn ss bs):gds) e3)     -- 敵の斧の位置を推測
+      actors = CAS.canActionFriend ss                    -- 行動可能な侍の（軍，武器）のリスト
+      attackOrders = GO.oms $ map (\(_,y) -> y) actors   -- 占領命令を含む命令のリスト
+      -- その内正しいmoveを行う命令のリスト --
+      validAttackOrders = filter (\(O.Order w as) -> VM.validMove (SS.getSamuraiPosition (Army.Friend,w) ss) as w gi) attackOrders
+      -- さらにその中で敵を攻撃する命令のリスト --
+      willAttackOrder = filter (\(O.Order w as) -> AA.isAttackOrder3 epos' (SS.getSamuraiPosition (Army.Friend,w) ss) (O.Order w as)) validAttackOrders 
 {-
 TODO::
  1. list-up available one order from current GameData with the following evaluation strategy.
