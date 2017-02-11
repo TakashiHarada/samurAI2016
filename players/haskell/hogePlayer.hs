@@ -40,7 +40,7 @@ mainLoop gds gi epos = do
       hFlush stdout
       mainLoop (gd:gds) gi epos'
   where
-    epos' = GP.guessEnemyPositions gds epos
+    epos' = GP.guessEnemyPositions gi gds epos
 
 detNextOrder :: [GD.GameData] -> P.EnemyPosition -> GI.GameInformation -> O.Order
 detNextOrder ((GD.GameData tn ss bs):gds) epos' gi = case tn of                 -- 最初の3ピリオド（18ターンは決め打）

@@ -16,21 +16,30 @@ import qualified CanActionSamurai as CAS
 import qualified GetShowingEnemy as GS
 import qualified BattlefieldState as B
 
--- 武器 w の敵の位置を推測する函数
--- 武器 w の敵が見えている(w == Sh.Show)場合は,見えている位置を返す
-guessPosition :: W.Weapon -> [GD.GameData] -> P.Position -> P.Position
-guessPosition w ((GD.GameData tn ss bs):gds) p
-  = if (SS.getSamuraiShowingStatus (A.Enemy, w) ss == Sh.Show)
-       then SS.getSamuraiPosition (A.Enemy, w) ss
-       else guessPositionFromLog w ((GD.GameData tn ss bs):gds) p
-
+-- 敵の位置を推測する函数
+-- 敵が見えている(w == Sh.Show)場合は,見えている位置を返す
+guessEnemyPositions :: GI.GameInformation ->
+                       [GD.GameData] -> P.EnemyPosition -> P.EnemyPosition
+guessEnemyPositions gi ((GD.GameData tn ss bs):gds) (sp,ax,sw) = (sp',ax',sw')
+  where
+    isSpearShow  = SS.getSamuraiShowingStatus (A.Enemy, W.Spear)  ss == Sh.Show
+    isAxeShow    = SS.getSamuraiShowingStatus (A.Enemy, W.Axe)    ss == Sh.Show
+    isSwordsShow = SS.getSamuraiShowingStatus (A.Enemy, W.Swords) ss == Sh.Show
+    diff = B.diffBattlefieldState (GD.getBattlefieldState (head gds)) bs 
+    sp' = if isSpearShow  then SS.getSamuraiPosition (A.Enemy, W.Spear) ss
+                          else guessPositionFromLog gi W.Spear diff sp
+    ax' = if isAxeShow    then SS.getSamuraiPosition (A.Enemy, W.Axe) ss
+                          else guessPositionFromLog gi W.Axe diff sp
+    sw' = if isSwordsShow then SS.getSamuraiPosition (A.Enemy, W.Swords) ss
+                          else guessPositionFromLog gi W.Swords diff sp
+                              
 -- if not Sh.Show. guess.
-guessPositionFromLog :: W.Weapon -> [GD.GameData] -> P.Position -> P.Position
-guessPositionFromLog w gds p = head (getMovablePositions p)
+guessPositionFromLog :: GI.GameInformation -> W.Weapon ->
+                        B.BattlefieldState -> P.Position -> P.Position
+guessPositionFromLog GI.First  w diff p = head (getMovablePositions p)
+guessPositionFromLog GI.Second w diff p = head (getMovablePositions p)
 -- FIXME:: 'head' should be changed!
 
+-- x+1 = East, x-1 = West, y+1 = South, y-1 = North
 getMovablePositions :: P.Position -> [P.Position]
 getMovablePositions (x,y) = P.removeOutOfBoard [(x,y+1),(x,y-1),(x+1,y),(x-1,y)]
-
-guessEnemyPositions :: [GD.GameData] -> P.EnemyPosition -> P.EnemyPosition
-guessEnemyPositions gd old = old
