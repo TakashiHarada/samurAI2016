@@ -29,7 +29,7 @@ guessEnemyPositions gi ((GD.GameData _ ss bs):gds) (sp,ax,sw) = (sp',ax',sw')
     isStay :: W.Weapon -> Bool
     isStay w = SS.getSamuraiOrderStatus (A.Enemy, w) ss == OS.Yet
 
-    diff = B.diffBattlefieldState (GD.getBattlefieldState (head gds)) bs 
+    diff = B.getNewEnemyArea (GD.getBattlefieldState (head gds)) bs 
     sp' = if isStay W.Spear then sp
           else if isShow W.Spear
                  then SS.getSamuraiPosition (A.Enemy, W.Spear) ss
@@ -42,17 +42,23 @@ guessEnemyPositions gi ((GD.GameData _ ss bs):gds) (sp,ax,sw) = (sp',ax',sw')
           else if isShow W.Swords
                  then SS.getSamuraiPosition (A.Enemy, W.Swords) ss
                  else guessPositionFromLog gi W.Swords diff sp
-                              
--- if not Sh.Show. guess.
-guessPositionFromLog :: GI.GameInformation -> W.Weapon ->
-                        B.BattlefieldState -> P.Position -> P.Position
--- I'm First = Enemy is Second = Enemy is likely to move North and West.
-guessPositionFromLog GI.First  w diff (x,y) = (x-1,y-1)
--- I'm Second = Enemy is First = Enemy is likely to move South and East.
-guessPositionFromLog GI.Second w diff (x,y) = (x+1,y+1)
 
+type Area = Int
+-- if not Sh.Show. guess.
+-- if Area > 0, enemy occupied some area in last turn, so he moved only 1 at most.
+guessPositionFromLog :: GI.GameInformation -> W.Weapon ->
+                        Area -> P.Position -> P.Position
+-- I'm First = Enemy is Second = Enemy is likely to move North and West.
+guessPositionFromLog GI.First  _ i (x,y) = if i > 0 then (x-1,y) else (x-1,y-1)
+-- I'm Second = Enemy is First = Enemy is likely to move South and East.
+guessPositionFromLog GI.Second _ i (x,y) = if i > 0 then (x+1,y) else (x+1,y+1)
+
+
+-- FYI ------------------------
 -- x+1 = East,  x-1 = West,
 -- y+1 = South, y-1 = North
-getMovablePositions :: P.Position -> [P.Position]
-getMovablePositions (x,y) = P.removeOutOfBoard [(x+1,y),(x,y+1),(x-1,y),(x,y-1)]
+-------------------------------
+
+--getMovablePositions :: P.Position -> [P.Position]
+--getMovablePositions (x,y) = P.removeOutOfBoard [(x+1,y),(x,y+1),(x-1,y),(x,y-1)]
 -- E, S, W, N
