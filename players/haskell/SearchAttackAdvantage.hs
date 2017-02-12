@@ -15,8 +15,7 @@ import AttackArea
 searchAttackAdvantage :: BSt.BattlefieldState-> P.Position -> O.Order -> Int
 searchAttackAdvantage bst pos ord = foldl (\acc x -> acc + getAdvantage x) 0 aa
          where
-            aa = map ((flip M.lookup) bst) $ attackArea pos ord
-
+           aa = map ((flip M.lookup) bst) $ attackArea pos ord
 
 getAdvantage :: Maybe BSe.BattlefieldSection -> Int
 getAdvantage bse | bse < Just (BSe.Occupied Ar.Friend W.Spear)  = 2

@@ -12,11 +12,21 @@ import qualified Ordering as O
 
 -- 動いてから占領するか，占領してから動く命令
 oms :: [W.Weapon] -> [O.Order]
-oms ws = [ O.Order w as |
+oms ws = (oms1 ws) ++ (oms2 ws)
+
+oms1 :: [W.Weapon] -> [O.Order]
+oms1 ws = [ O.Order w as1 |
         w <- ws,
         os <- [A.Occupy d | d <- [D.South, D.East, D.North, D.West]],
         ms <- [A.Move   d | d <- [D.South, D.East, D.North, D.West]],
-        as <- [[os,ms]]]
+        as1 <- [[os,ms]]]
+
+oms2 :: [W.Weapon] -> [O.Order]
+oms2 ws = [ O.Order w as2 |
+        w <- ws,
+        os <- [A.Occupy d | d <- [D.South, D.East, D.North, D.West]],
+        ms <- [A.Move   d | d <- [D.South, D.East, D.North, D.West]],
+        as2 <- [[ms,os]]]
 
 -- os :: [W.Weapon] -> [O.Order]
 -- os ws = [O.Order w [os] |
