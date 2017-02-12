@@ -94,6 +94,7 @@ detNextOrder (GD.GameData tn ss bs) epos' gi = case tn of                 -- 最
     attackOrders' = if (Army.Friend,W.Spear) `elem` actors then spearOrder:validAttackOrders else validAttackOrders
     adv6 = filter (\(O.Order w as) -> SAA.searchAttackAdvantage bs (SS.getSamuraiPosition (Army.Friend,w) ss) (O.Order w as) > 5) attackOrders' 
     adv4 = filter (\(O.Order w as) -> SAA.searchAttackAdvantage bs (SS.getSamuraiPosition (Army.Friend,w) ss) (O.Order w as) > 3) attackOrders' 
+    notAttackedOrder = filter (\order -> DP.willBeAttacked ss order epos' gi) attackOrders'
     notAttackedOrder6 = filter (\order -> DP.willBeAttacked ss order epos' gi) adv6
     notAttackedOrder4 = filter (\order -> DP.willBeAttacked ss order epos' gi) adv4
     
