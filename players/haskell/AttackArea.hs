@@ -4,9 +4,9 @@ import qualified Action as A
 import qualified Direction as D
 import qualified Weapon as W
 import qualified Position as P
-import qualified GameData as G
+-- import qualified GameData as G
 import qualified Ordering as O
-import Data.Char
+-- import Data.Char
 
 isAttackOrder :: P.Position -> O.Order -> Bool
 isAttackOrder pos o = pos `elem` (attackArea pos o)
@@ -53,3 +53,4 @@ moving (x,y) (A.Move D.South) = (x,y+1)
 moving (x,y) (A.Move D.East)  = (x+1,y)
 moving (x,y) (A.Move D.North) = (x,y-1)
 moving (x,y) (A.Move D.West)  = (x-1,y)
+moving (x,y) _                = (x,y)

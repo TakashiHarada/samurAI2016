@@ -3,7 +3,7 @@ module HideShow where
 import qualified Ordering as O
 import qualified Action as A
 import qualified Army as Army
-import qualified GameData as G
+-- import qualified GameData as G
 import qualified SamuraiStates as SA
 import qualified ShowingStatus as SS
 

@@ -1,8 +1,6 @@
 -- $ hlint hogePlayer.hs
 
---import Control.Monad
 import System.IO
---import qualified TurnInformation as T
 import qualified TurnNumber as TN
 import qualified Ordering as O
 import qualified GameInformation as GI
@@ -19,8 +17,9 @@ import qualified CanActionSamurai as CAS
 import qualified SamuraiStates as SS
 import qualified AttackArea as AA
 import qualified GuessPosition as GP
-import qualified DangerousPosition as DP
+-- import qualified DangerousPosition as DP
 import qualified HideShow as HS
+import qualified SearchAttackAdvantage as SAA
 
 main :: IO ()
 main = do
@@ -68,20 +67,29 @@ detNextOrder (GD.GameData tn ss bs) epos' gi = case tn of                 -- 最
   _  -> if (not . null) willAttackOrders -- 敵を攻撃する命令があるか？
        then HS.addHideOrShow ss (head willAttackOrders)
        else 
-         if (not . null) notAttackedOrder    -- 占領命令の中で敵に攻撃されない命令があるか？
-         then HS.addHideOrShow ss (head notAttackedOrder)
+         if (not . null) adv4
+         then HS.addHideOrShow ss (head adv4)
          else
            HS.addHideOrShow ss (head attackOrders')
   where
-    actors = CAS.canActionFriend ss                    -- 行動可能な侍の（軍，武器）のリスト
-    attackOrders = GO.oms $ map (\(_,y) -> y) actors   -- 占領命令を含む命令のリスト
+    actors = CAS.canActionFriend ss -- 行動可能な侍の（軍，武器）のリスト
+    -- 侍の位置のリスト（位置がわかるものだけ：隱伏している敵の侍の位置は含まない）
+    explicitPos = map (\(a,w) -> SS.getSamuraiPosition (a,w) ss) (friendsW ++ CAS.canActionEnemy ss)
+    friendsW = [(Army.Friend,w) | w <- [W.Spear,W.Swords,W.Axe]]
+    attackOrders = GO.oms $ map (\(_,y) -> y) actors  -- 占領命令を含む命令のリスト
     -- その内正しいmoveを行う命令のリスト --
-    validAttackOrders = filter (\(O.Order w as) -> VM.validMove (SS.getSamuraiPosition (Army.Friend,w) ss) as w gi) attackOrders
+    validAttackOrders = filter (\(O.Order w as) -> VM.validMove (SS.getSamuraiPosition (Army.Friend,w) ss) as w gi explicitPos) attackOrders
     -- さらにその中で敵を攻撃する命令のリスト --
     willAttackOrders = filter (\(O.Order w as) -> AA.isAttackOrder3 epos' (SS.getSamuraiPosition (Army.Friend,w) ss) (O.Order w as)) validAttackOrders
     spearOrder = O.reverseOrder gi $ O.Order W.Spear [A.Move D.South, A.Occupy D.West] -- 槍だけは基本的にこの命令を実行
     attackOrders' = if (Army.Friend,W.Spear) `elem` actors then spearOrder:validAttackOrders else validAttackOrders
-    notAttackedOrder = filter (\order -> DP.willBeAttacked ss order epos' gi) attackOrders'
+    adv4 = filter (\(O.Order w as) -> SAA.searchAttackAdvantage bs (SS.getSamuraiPosition (Army.Friend,w) ss) (O.Order w as) > 3) attackOrders' 
+    -- notAttackedOrder = filter (\order -> DP.willBeAttacked ss order epos' gi) adv4
+    
+
+-- foo2 = (GD.getSamuraiStates foo)
+-- GO.oms $ map (\(_,y) -> y) $ CAS.canActionFriend foo2
+-- foo3 = filter (\(O.Order w as) -> VM.validMove (SS.getSamuraiPosition (Army.Friend,w) foo2) as w GI.Second [(8,6),(7,4)]) $  GO.oms $ map (\(_,y) -> y) $ CAS.canActionFriend foo2
 {-
 TODO::
  1. list-up available one order from current GameData with the following evaluation strategy.
@@ -91,16 +99,20 @@ TODO::
      * size of occupation area
      * whether some Friend is in danger or not.
 -}
+-- SS.getSamuraiPosition (Army.Enemy,W.Axe) (GD.getSamuraiStates foo)
+-- AA.attackArea (8,6) (O.Order W.Swords [A.Move D.North, A.Occupy D.North])
+-- AA.attackArea (8,6) (O.Order W.Swords [A.Occupy D.South, A.Move D.North])
+
 
 -- inputExample :: [String]
 -- inputExample =
---   ["14",
---    "0 6 1 1 0",
+--   ["25",
+--    "0 6 0 1 0",
 --    "1 14 0 1 0",
 --    "9 12 0 1 0",
---    "-1 -1 1 0 0",
 --    "-1 -1 0 0 0",
---    "-1 -1 1 0 0",
+--    "-1 -1 0 0 0",
+--    "7 4 1 1 0",
 --    "0 9 9 9 9 9 9 2 9 9 9 9 9 9 9",
 --    "8 9 9 9 9 9 9 9 9 9 9 9 9 9 9",
 --    "8 8 9 9 9 9 9 9 9 9 9 9 9 9 9",
@@ -116,6 +128,8 @@ TODO::
 --    "1 1 8 8 8 8 8 8 2 2 2 8 8 8 8",
 --    "1 1 1 8 8 8 8 8 2 2 2 8 8 8 9",
 --    "8 1 1 1 8 8 8 5 2 2 2 8 8 9 3"]
+
+-- foo = GD.divideComponent inputExample
 
 {-
 An example of Turn Information

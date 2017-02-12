@@ -1,10 +1,10 @@
 module DangerousPosition where
 
 import Data.List
-import Control.Applicative
-import Control.Monad
+-- import Control.Applicative
+-- import Control.Monad
 
-import qualified GameData as GD
+-- import qualified GameData as GD
 import qualified Army as A
 import qualified Action as Action
 import qualified GameInformation as GI
@@ -14,9 +14,9 @@ import qualified Weapon as W
 import qualified AttackableArea as AA
 import qualified SamuraiStates as SS
 import qualified CanActionSamurai as CAS
-import qualified GetShowingEnemy as GS
+-- import qualified GetShowingEnemy as GS
 import qualified Ordering as O
-import qualified ValidMove as VM
+-- import qualified ValidMove as VM
 
 -- 区画 p は武器 w の味方が次の相手のターンで敵に攻撃され得る区画か否かを判定する函数
 -- p が攻撃され得る区画ならば True，安全ならば False
@@ -54,8 +54,8 @@ willBeAttacked ss (O.Order w as) epos gi = or [oneIsDanger,twoIsDanger,actorIsDa
 
 
 -- 次の相手のターンで敵が攻撃可能な区画の全てを返す函数
-dangerousPositions :: [GD.GameData] -> [P.Position]
-dangerousPositions = undefined
+-- dangerousPositions :: [GD.GameData] -> [P.Position]
+-- dangerousPositions = undefined
 
 -- -- 区画 p は武器 w の味方が次の相手のターンで敵に攻撃され得る区画か否かを判定する函数
 -- -- p が攻撃され得る区画ならば True，安全ならば False

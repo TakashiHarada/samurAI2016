@@ -1,14 +1,14 @@
 module AttackableArea where
 
-import Data.Map as M
-import qualified Ordering as O
+-- import Data.Map as M
+-- import qualified Ordering as O
 import qualified Weapon as W
-import qualified Action as Ac
-import qualified Army as Ar
-import qualified Direction as D
-import qualified GameData as G
+-- import qualified Action as Ac
+-- import qualified Army as Ar
+-- import qualified Direction as D
+-- import qualified GameData as G
 import qualified Position as P
-import qualified SamuraiStates as SS
+-- import qualified SamuraiStates as SS
 
 -- import Test.QuickCheck
 

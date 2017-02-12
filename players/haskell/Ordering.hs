@@ -1,8 +1,8 @@
 module Ordering where
 
-import qualified Position as P
+-- import qualified Position as P
 import qualified Action as A
-import qualified Direction as D
+-- import qualified Direction as D
 import qualified Weapon as W
 import qualified GameData as G
 import qualified GameInformation as GI

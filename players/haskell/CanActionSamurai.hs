@@ -1,6 +1,6 @@
 module CanActionSamurai where
 
-import qualified GameData as G
+-- import qualified GameData as G
 import qualified Weapon as W
 import qualified Army as A
 import qualified OrderStatus as OS
